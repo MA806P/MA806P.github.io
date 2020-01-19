@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言本篇文章来介绍一下 NSURLSession 。之前的网络基础架构NSURLConnection，被苹果在iOS9之后宣布弃用，在2013年的WWDC上，Apple揭开了NSURLConnection继任者的面纱：NSURLSession。 NSURLSession 介绍 NSURLSession 支持 http2.0 协议。  与NSURLConnection相比，NSURLSession最">
+<meta name="keywords" content="MA806P blog iOS 技术博客 个人博客">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NSURLSession">
+<meta property="og:url" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;2017&#x2F;11&#x2F;20&#x2F;urlsession&#x2F;index.html">
+<meta property="og:site_name" content="Peng&#39;s blog">
+<meta property="og:description" content="前言本篇文章来介绍一下 NSURLSession 。之前的网络基础架构NSURLConnection，被苹果在iOS9之后宣布弃用，在2013年的WWDC上，Apple揭开了NSURLConnection继任者的面纱：NSURLSession。 NSURLSession 介绍 NSURLSession 支持 http2.0 协议。  与NSURLConnection相比，NSURLSession最">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2017&#x2F;urlsession-1.png">
+<meta property="og:updated_time" content="2019-11-29T08:00:24.418Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2017&#x2F;urlsession-1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: false,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yupeng.fun/2017/11/20/urlsession/"/>
+
+
+
+
+
+  <title>NSURLSession | Peng's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Peng's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yupeng.fun/2017/11/20/urlsession/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="MA806P">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avator-default.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Peng's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">NSURLSession</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-20T23:01:03+08:00">
+                2017-11-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本篇文章来介绍一下 NSURLSession 。<br>之前的网络基础架构NSURLConnection，被苹果在iOS9之后宣布弃用，在2013年的WWDC上，Apple揭开了NSURLConnection继任者的面纱：NSURLSession。</p>
+<h2 id="NSURLSession-介绍"><a href="#NSURLSession-介绍" class="headerlink" title="NSURLSession 介绍"></a>NSURLSession 介绍</h2><ol>
+<li><p>NSURLSession 支持 http2.0 协议。</p>
+</li>
+<li><p>与NSURLConnection相比，NSURLSession最直接的改善就是提供了配置每个会话的缓存，协议，cookie和证书政策（credential policies）。这使得框架的网络基础架构和部分应用程序独立工作，而不会互相干扰。每一个NSURLSession对象都是根据一个NSURLSessionConfiguration初始化的，该NSURLSessionConfiguration指定了上面提到的政策，以及一系列为了提高移动设备性能而专门添加的新选项。</p>
+</li>
+<li><p>NSURLSession针对下载/上传等复杂的网络操作提供了专门的解决方案，针对普通、上传和下载分别对应三种不同的网络请求任务：NSURLSessionDataTask, NSURLSessionUploadTask和NSURLSessionDownloadTask。创建的task都是挂起状态，需要调用resume方法才能执行。<br><img src="/images/2017/urlsession-1.png" alt="NSURLSessionTask"></p>
+</li>
+</ol>
+<p>NSURLSessionDataTask,可以用来处理一般的网络请求，如 GET | POST 请求等。<br>NSURLSessionDataTask 有一个子类为 NSURLSessionUploadTask，主要用于处理上传请求。<br>NSURLSessionDownloadTask，主要用于处理下载请求。</p>
+<h2 id="NSURLSession-使用"><a href="#NSURLSession-使用" class="headerlink" title="NSURLSession 使用"></a>NSURLSession 使用</h2><p>NSURLSessionDataTask 发送 GET 请求</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">//请求链接</span><br><span class="line"> NSString * urlStr = @&quot;https://api.douban.com/v2/book/1220562&quot;;</span><br><span class="line"></span><br><span class="line"> //创建 NSURLSession 对象</span><br><span class="line"> NSURLSession * session = [NSURLSession sharedSession];</span><br><span class="line"> </span><br><span class="line"> /**</span><br><span class="line">  创建 Data Task 请求</span><br><span class="line">  completionHandler  完成之后的回调（成功或失败）</span><br><span class="line">  @param data     返回的数据（响应体）</span><br><span class="line">  @param response 响应头</span><br><span class="line">  @param error    错误信息</span><br><span class="line">  */</span><br><span class="line">    </span><br><span class="line">    NSURLSessionDataTask * dataTask = [session dataTaskWithURL:[NSURL URLWithString:urlStr] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) &#123;</span><br><span class="line">        NSDictionary * dataDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];</span><br><span class="line">        NSLog(@&quot;--- %@ %@  %@&quot;, dataDict, NSStringFromClass([response class]), error);</span><br><span class="line"></span><br><span class="line">    &#125;];</span><br><span class="line">    //执行data task</span><br><span class="line">    [dataTask resume];</span><br></pre></td></tr></table></figure>
+
+
+<p>NSURLSessionDataTask 发送 POST 请求</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">NSURLSession * session = [NSURLSession sharedSession];</span><br><span class="line">NSString * urlStr = @&quot;https://api.weibo.com/2/statuses/update.json&quot;;</span><br><span class="line"></span><br><span class="line">//创建可变请求对象</span><br><span class="line">NSMutableURLRequest * request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlStr]];</span><br><span class="line">//设置请求类型 post</span><br><span class="line">request.HTTPMethod = @&quot;POST&quot;;</span><br><span class="line">//设置请求体</span><br><span class="line">request.HTTPBody = [@&quot;status=123&amp;access_token=123&quot; dataUsingEncoding:NSUTF8StringEncoding];</span><br><span class="line">//创建请求 task</span><br><span class="line">NSURLSessionDataTask * dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) &#123;</span><br><span class="line">    //解析返回数据</span><br><span class="line">    NSDictionary * dataDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];</span><br><span class="line">    NSLog(@&quot;--- %@ %@  %@&quot;, dataDict, NSStringFromClass([response class]), error);</span><br><span class="line">    </span><br><span class="line">&#125;];</span><br><span class="line">//执行data task</span><br><span class="line">[dataTask resume];</span><br></pre></td></tr></table></figure>
+
+<p>NSURLSessionDownloadTask 下载内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//下面的例子，使用NSURLSessionDownloadTask来下载一张图片</span><br><span class="line">    </span><br><span class="line">    NSURLSession * session = [NSURLSession sharedSession];</span><br><span class="line">    //图片链接</span><br><span class="line">    NSString * urlStr = @&quot;http://upload-images.jianshu.io/upload_images/288548-8240c430a7526d6a.png&quot;;</span><br><span class="line">    NSURLSessionDownloadTask * downloadTask = [session downloadTaskWithURL:[NSURL URLWithString:urlStr] completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) &#123;</span><br><span class="line"></span><br><span class="line">        //下载完成，下载的内容是先保存在沙盒的Tmp文件夹中，location文件保存的路径</span><br><span class="line">        //在tmp文件中只是短暂的保存，很快就会被清除</span><br><span class="line">        //要想保存下来，可以移动到别的文件夹中，下面是将文件保存到Caches文件夹中</span><br><span class="line">        </span><br><span class="line">        NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject]</span><br><span class="line">                              stringByAppendingPathComponent:response.suggestedFilename];</span><br><span class="line">        </span><br><span class="line">        [[NSFileManager defaultManager] moveItemAtURL:location toURL:[NSURL fileURLWithPath:filePath] error:nil];</span><br><span class="line">        </span><br><span class="line">    &#125;];</span><br><span class="line">    [downloadTask resume];</span><br></pre></td></tr></table></figure>
+
+
+<p>使用代理方法获取数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//创建获取数据任务，用来获取图片数据</span><br><span class="line">NSURLSessionConfiguration * configuration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@&quot;com.myapp.networking.getdata&quot;];</span><br><span class="line">NSURLSession * session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];</span><br><span class="line"></span><br><span class="line">//图片链接</span><br><span class="line">NSString * urlStr = @&quot;http://f.hiphotos.baidu.com/image/pic/item/1f178a82b9014a903ba25d77a0773912b21bee58.jpg&quot;;</span><br><span class="line">NSURLSessionDataTask * dataTask = [session dataTaskWithURL:[NSURL URLWithString:urlStr]];</span><br><span class="line">[dataTask resume];</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">-(void)URLSession:(NSURLSession *)session dataTask:(nonnull NSURLSessionDataTask *)dataTask</span><br><span class="line">didReceiveResponse:(nonnull NSURLResponse *)response</span><br><span class="line">completionHandler:(nonnull void (^)(NSURLSessionResponseDisposition))completionHandler &#123;</span><br><span class="line">    //开始接收数据</span><br><span class="line">    self.dataM = [NSMutableData data];</span><br><span class="line">    //必须告诉系统是否接收服务器返回的数据</span><br><span class="line">    completionHandler(NSURLSessionResponseAllow);</span><br><span class="line">&#125;</span><br><span class="line">-(void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data &#123;</span><br><span class="line">    //拼接服务器返回的数据</span><br><span class="line">    [self.dataM appendData:data];</span><br><span class="line">&#125;</span><br><span class="line">-(void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error &#123;</span><br><span class="line"></span><br><span class="line">    //获取到全部数据</span><br><span class="line">    dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">        self.imgView.image = [UIImage imageWithData:self.dataM];</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下载任务NSURLSessionDownloadTask，代理方法 NSURLSessionDownloadDelegate</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">NSURLSessionConfiguration *backgroundConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier: @&quot;com.myapp.networking.background&quot;];</span><br><span class="line">NSOperationQueue *operationQueue = [NSOperationQueue mainQueue];</span><br><span class="line">NSURLSession *backgroundSession = [NSURLSession sessionWithConfiguration:backgroundConfiguration delegate:self delegateQueue:operationQueue];</span><br><span class="line">NSURL *url = [NSURL URLWithString:@&quot;http://f.hiphotos.baidu.com/image/pic/item/1f178a82b9014a903ba25d77a0773912b21bee58.jpg&quot;];</span><br><span class="line">NSURLSessionDownloadTask *downloadTask = [backgroundSession downloadTaskWithURL:url];</span><br><span class="line">[downloadTask resume];</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">//代理方法</span><br><span class="line">- (void)URLSession:(NSURLSession *)session</span><br><span class="line">      downloadTask:(NSURLSessionDownloadTask *)downloadTask</span><br><span class="line">      didWriteData:(int64_t)bytesWritten</span><br><span class="line"> totalBytesWritten:(int64_t)totalBytesWritten</span><br><span class="line">totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite</span><br><span class="line">&#123;</span><br><span class="line">    NSLog(@&quot;Session %@ download task %@ wrote an additional %lld bytes (total %lld bytes) out of an expected %lld bytes.\n&quot;, session, downloadTask, bytesWritten, totalBytesWritten, totalBytesExpectedToWrite);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)URLSession:(NSURLSession *)session</span><br><span class="line">      downloadTask:(NSURLSessionDownloadTask *)downloadTask</span><br><span class="line"> didResumeAtOffset:(int64_t)fileOffset</span><br><span class="line">expectedTotalBytes:(int64_t)expectedTotalBytes</span><br><span class="line">&#123;</span><br><span class="line">    NSLog(@&quot;Session %@ download task %@ resumed at offset %lld bytes out of an expected %lld bytes.\n&quot;, session, downloadTask, fileOffset, expectedTotalBytes);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)URLSession:(NSURLSession *)session</span><br><span class="line">      downloadTask:(NSURLSessionDownloadTask *)downloadTask</span><br><span class="line">didFinishDownloadingToURL:(NSURL *)location</span><br><span class="line">&#123;</span><br><span class="line">    NSLog(@&quot;Session %@ download task %@ finished downloading to URL %@\n&quot;, session, downloadTask, location);</span><br><span class="line">    </span><br><span class="line">    // Perform the completion handler for the current session</span><br><span class="line">    //self.completionHandlers[session.configuration.identifier]();</span><br><span class="line">    </span><br><span class="line">    // Open the downloaded file for reading</span><br><span class="line">    NSError *readError = nil;</span><br><span class="line">    NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingFromURL:location error:&amp;readError];</span><br><span class="line">    // ...</span><br><span class="line">    </span><br><span class="line">    // Move the file to a new URL</span><br><span class="line">    NSFileManager *fileManager = [NSFileManager defaultManager];</span><br><span class="line">    NSURL *cacheDirectory = [[fileManager URLsForDirectory:NSCachesDirectory inDomains:NSUserDomainMask] firstObject];</span><br><span class="line">    NSError *moveError = nil;</span><br><span class="line">    if ([fileManager moveItemAtURL:location toURL:cacheDirectory error:&amp;moveError]) &#123;</span><br><span class="line">        // ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h4><p><a href="https://developer.apple.com/documentation/foundation/urlsession" target="_blank" rel="noopener">https://developer.apple.com/documentation/foundation/urlsession</a><br><a href="https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/URLLoadingSystem/URLLoadingSystem.html#//apple_ref/doc/uid/10000165i" target="_blank" rel="noopener">https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/URLLoadingSystem/URLLoadingSystem.html#//apple_ref/doc/uid/10000165i</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    MA806P
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yupeng.fun/2017/11/20/urlsession/" title="NSURLSession">http://yupeng.fun/2017/11/20/urlsession/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/22/extension-share/" rel="next" title="Application-Extension（三）：Share-Extension">
+                <i class="fa fa-chevron-left"></i> Application-Extension（三）：Share-Extension
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/20/viewlayer/" rel="prev" title="UIView, CALayer">
+                UIView, CALayer <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avator-default.png"
+                alt="MA806P" />
+            
+              <p class="site-author-name" itemprop="name">MA806P</p>
+              <p class="site-description motion-element" itemprop="description">在希望的田野上 折腾着</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/MA806P" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:mayp126@126.com" target="_blank" title="邮箱">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>邮箱</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NSURLSession-介绍"><span class="nav-number">2.</span> <span class="nav-text">NSURLSession 介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NSURLSession-使用"><span class="nav-number">3.</span> <span class="nav-text">NSURLSession 使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Reference"><span class="nav-number">3.0.1.</span> <span class="nav-text">Reference</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">MA806P</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

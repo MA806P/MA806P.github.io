@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="苹果从iOS6开始，提供了一个活动列表视图，为分享和操作数据提供了一个统一的服务接口，通过UIActivityViewController来控制它的呈现和关闭，凡是继承UIActivity抽象类的子类对象都可以放在列表中呈现出来。如下图所示：  通过下面代码，就可以调出视图： 12345678910111213141516- (IBAction)activity:(id)sender &amp;#123;">
+<meta name="keywords" content="MA806P blog iOS 技术博客 个人博客">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UIActivityViewController使用">
+<meta property="og:url" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;2017&#x2F;04&#x2F;22&#x2F;activityview&#x2F;index.html">
+<meta property="og:site_name" content="Peng&#39;s blog">
+<meta property="og:description" content="苹果从iOS6开始，提供了一个活动列表视图，为分享和操作数据提供了一个统一的服务接口，通过UIActivityViewController来控制它的呈现和关闭，凡是继承UIActivity抽象类的子类对象都可以放在列表中呈现出来。如下图所示：  通过下面代码，就可以调出视图： 12345678910111213141516- (IBAction)activity:(id)sender &amp;#123;">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2017&#x2F;activity-1.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2017&#x2F;activity-2.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2017&#x2F;activity-3.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2017&#x2F;activity-4.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2017&#x2F;activity-5.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2017&#x2F;activity-6.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2017&#x2F;activity-7.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2017&#x2F;activity-8.PNG">
+<meta property="og:updated_time" content="2019-11-29T08:01:30.791Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2017&#x2F;activity-1.PNG">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: false,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yupeng.fun/2017/04/22/activityview/"/>
+
+
+
+
+
+  <title>UIActivityViewController使用 | Peng's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Peng's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yupeng.fun/2017/04/22/activityview/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="MA806P">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avator-default.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Peng's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">UIActivityViewController使用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-22T16:30:05+08:00">
+                2017-04-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>苹果从iOS6开始，提供了一个活动列表视图，为分享和操作数据提供了一个统一的服务接口，通过UIActivityViewController来控制它的呈现和关闭，凡是继承UIActivity抽象类的子类对象都可以放在列表中呈现出来。如下图所示：</p>
+<p><img src="/images/2017/activity-1.PNG" alt="活动列表"></p>
+<p>通过下面代码，就可以调出视图：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">- (IBAction)activity:(id)sender &#123;</span><br><span class="line"></span><br><span class="line">    // 设置分享内容</span><br><span class="line">    NSString *text = @&quot;分享内容&quot;;</span><br><span class="line">    UIImage *image = [UIImage imageNamed:@&quot;1.jpg&quot;];</span><br><span class="line">    NSURL *url = [NSURL URLWithString:@&quot;https://www.baidu.com&quot;];</span><br><span class="line">    NSArray *activityItems = @[text, image, url];</span><br><span class="line">    </span><br><span class="line">    UIActivityViewController *activityViewController =    [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];</span><br><span class="line">    [self presentViewController:activityViewController animated:YES completion:nil];</span><br><span class="line">    </span><br><span class="line">    // 选中活动列表类型</span><br><span class="line">    [activityViewController setCompletionWithItemsHandler:^(NSString * __nullable activityType, BOOL completed, NSArray * __nullable returnedItems, NSError * __nullable activityError)&#123;</span><br><span class="line">        NSLog(@&quot;act type %@&quot;,activityType);</span><br><span class="line">    &#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>默认情况下，如没有指定 UIActivityViewController 的 applicationActivities ，那么系统将会自动检测所有可用于所提供内容的服务，显示在列表中，我们也可以排除特定的 Activity 类型。<br>activityViewController.excludedActivityTypes = @[UIActivityTypePostToFacebook];</p>
+<p>当我们点击活动列表中的选项时，系统会作出相应的操作，例如常见的，微博、微信、QQ的分享：</p>
+<p><img src="/images/2017/activity-2.PNG" alt="微博分享"><br><img src="/images/2017/activity-3.PNG" alt="微信分享"><br><img src="/images/2017/activity-4.PNG" alt="QQ分享"></p>
+<h2 id="自定义-UIActivity"><a href="#自定义-UIActivity" class="headerlink" title="自定义 UIActivity"></a>自定义 UIActivity</h2><p>如果系统提供的操作不能满足我们的需求，也可以自定义UIActivity，可获取按钮选择事件，手动的进行处理。下面就来手动的实现微博分享操作。</p>
+<h5 id="1-创建WeiboActivity："><a href="#1-创建WeiboActivity：" class="headerlink" title="1.创建WeiboActivity："></a>1.创建WeiboActivity：</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">//WeiboActivity.m</span><br><span class="line">#import &quot;WeiboActivity.h&quot;</span><br><span class="line">@implementation WeiboActivity</span><br><span class="line"></span><br><span class="line">+ (UIActivityCategory)activityCategory&#123;</span><br><span class="line">    return UIActivityCategoryShare;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (NSString *)activityType&#123;</span><br><span class="line">    return @&quot;com.myz.share.weibo.post&quot;;</span><br><span class="line">&#125;</span><br><span class="line">//显示在列表中的图标</span><br><span class="line">- (UIImage *)activityImage&#123;</span><br><span class="line">    return [UIImage imageNamed:@&quot;share_weibo&quot;];</span><br><span class="line">&#125;</span><br><span class="line">//显示在列表中标题</span><br><span class="line">- (NSString *)activityTitle&#123;</span><br><span class="line">    return @&quot;微博分享&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (BOOL)canPerformWithActivityItems:(NSArray *)activityItems&#123;</span><br><span class="line">    return YES;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)prepareWithActivityItems:(NSArray *)activityItems&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)performActivity &#123;</span><br><span class="line">    if (self.performWeiboActivityBlock) &#123;</span><br><span class="line">        self.performWeiboActivityBlock();</span><br><span class="line">    &#125;</span><br><span class="line">    [self activityDidFinish:YES];</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>UIActivity 类型:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">+ (UIActivityCategory)activityCategory；</span><br><span class="line">- (NSString *)activityType；</span><br></pre></td></tr></table></figure>
+<p>UIActivity 类型又分为“分享”和“操作”两大类，如下图所示：</p>
+<p><img src="/images/2017/activity-5.PNG" alt="UIActivityType"></p>
+<ul>
+<li>列表未显示前判断是否显示该activity，YES显示。这里可以根据将要分享的内容activityItems来判断是否在列表中显示该activity。例如微博分享最多九张图，在这里可以判断是否超过，从而来确定是否显示。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (BOOL)canPerformWithActivityItems:(NSArray *)activityItems;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>点击该activity后调用的方法</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (void)performActivity;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h6 id="2-自定义好了activity后就可以显示了："><a href="#2-自定义好了activity后就可以显示了：" class="headerlink" title="2.自定义好了activity后就可以显示了："></a>2.自定义好了activity后就可以显示了：</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">WeiboActivity * weiboActivity = [[WeiboActivity alloc] init];</span><br><span class="line">weiboActivity.performWeiboActivityBlock = ^&#123;</span><br><span class="line">    [self socialSinaWeibo];</span><br><span class="line">&#125;;</span><br><span class="line">NSArray * activitys = @[weiboActivity];</span><br><span class="line"></span><br><span class="line">UIActivityViewController *activityViewController =    [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:activitys];</span><br><span class="line">[self presentViewController:activityViewController animated:YES completion:nil];</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/images/2017/activity-6.PNG" alt="自定义分享按钮"></p>
+<h5 id="3-分享到微博"><a href="#3-分享到微博" class="headerlink" title="3.分享到微博"></a>3.分享到微博</h5><p>想要分享到微博，获取到点击事件后还需要进一步的处理，这里使用系统的微博分享接口，使用前需要在系统设置中登陆微博账号</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">//@import Social</span><br><span class="line">- (void)socialSinaWeibo &#123;</span><br><span class="line">    // 1. 判断设备是否支持指定的分享平台</span><br><span class="line">    // SLComposeViewController：社交分享的视图控制器</span><br><span class="line">    BOOL isAvailable = [SLComposeViewController isAvailableForServiceType:SLServiceTypeSinaWeibo];</span><br><span class="line">    if (isAvailable == NO) &#123;</span><br><span class="line">        NSLog(@&quot;应用不支持新浪微博分享&quot;);</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    // 2. 创建分享视图控制器，并指定分享平台</span><br><span class="line">    SLComposeViewController *composeVC = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeSinaWeibo];</span><br><span class="line">    /* 系统支持的分享功能可以分享的平台</span><br><span class="line">     SOCIAL_EXTERN NSString *const SLServiceTypeTwitter</span><br><span class="line">     SOCIAL_EXTERN NSString *const SLServiceTypeFacebook</span><br><span class="line">     SOCIAL_EXTERN NSString *const SLServiceTypeSinaWeibo</span><br><span class="line">     SOCIAL_EXTERN NSString *const SLServiceTypeTencentWeibo</span><br><span class="line">     SOCIAL_EXTERN NSString *const SLServiceTypeLinkedIn</span><br><span class="line">     */    </span><br><span class="line"></span><br><span class="line">    // 3. 设置分享内容</span><br><span class="line">    [composeVC setInitialText:@&quot;微博分享&quot;];</span><br><span class="line">    [composeVC addImage:[UIImage imageNamed:@&quot;1.png&quot;]];</span><br><span class="line">    [composeVC addURL:[NSURL URLWithString:@&quot;https://www.baidu.com&quot;]];</span><br><span class="line">    </span><br><span class="line">    // 4. 进入分享界面</span><br><span class="line">    [self presentViewController:composeVC animated:YES completion:^&#123;</span><br><span class="line">        NSLog(@&quot;进入分享界面&quot;);</span><br><span class="line">    &#125;];</span><br><span class="line">    // 5. 监听用户操作</span><br><span class="line">    [composeVC setCompletionHandler:^(SLComposeViewControllerResult result) &#123;</span><br><span class="line">        if (result == SLComposeViewControllerResultCancelled) &#123;</span><br><span class="line">            NSLog(@&quot;取消分享&quot;);</span><br><span class="line">        &#125;else if (result == SLComposeViewControllerResultDone) &#123;</span><br><span class="line">            NSLog(@&quot;分享成功&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;];</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/2017/activity-7.PNG" alt="微博分享"></p>
+<p><img src="/images/2017/activity-8.PNG" alt="分享结果"></p>
+<p>这样就可以实现自定义的微博分享的功能，可在微博中查看分享的内容，显示来自iOS。</p>
+<p>Demo: <a href="https://github.com/MA806P/ActivityDemo" target="_blank" rel="noopener">https://github.com/MA806P/ActivityDemo</a></p>
+<h4 id="References"><a href="#References" class="headerlink" title="References"></a>References</h4><p><a href="https://github.com/nixzhu/dev-blog/blob/master/2014-04-22-ui-activity-viewcontroller.md" target="_blank" rel="noopener">https://github.com/nixzhu/dev-blog/blob/master/2014-04-22-ui-activity-viewcontroller.md</a><br><a href="http://www.jianshu.com/p/9de528d96466" target="_blank" rel="noopener">http://www.jianshu.com/p/9de528d96466</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    MA806P
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yupeng.fun/2017/04/22/activityview/" title="UIActivityViewController使用">http://yupeng.fun/2017/04/22/activityview/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/06/enumerate/" rel="next" title="用枚举表示状态、选项">
+                <i class="fa fa-chevron-left"></i> 用枚举表示状态、选项
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/27/func-parameters/" rel="prev" title="可变参数的函数">
+                可变参数的函数 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avator-default.png"
+                alt="MA806P" />
+            
+              <p class="site-author-name" itemprop="name">MA806P</p>
+              <p class="site-description motion-element" itemprop="description">在希望的田野上 折腾着</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/MA806P" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:mayp126@126.com" target="_blank" title="邮箱">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>邮箱</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义-UIActivity"><span class="nav-number">1.</span> <span class="nav-text">自定义 UIActivity</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-创建WeiboActivity："><span class="nav-number">1.0.0.1.</span> <span class="nav-text">1.创建WeiboActivity：</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#2-自定义好了activity后就可以显示了："><span class="nav-number">1.0.0.1.1.</span> <span class="nav-text">2.自定义好了activity后就可以显示了：</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-分享到微博"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">3.分享到微博</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#References"><span class="nav-number">1.0.1.</span> <span class="nav-text">References</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">MA806P</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

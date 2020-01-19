@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言本篇文章总结一下在 iOS 开发中关于时间、日期的一些知识点。阅读本文你将会看到有关，NSDate、NSDateFormatter、NSTimeZone、NSLocale 、NSDateComponents、NSCalendar 的使用。 开始之前先来一波科普：  全球24个时区的划分在1884年国际会议上制定了全球性的标准时，明定以英国伦敦格林威治这个地方为零度经线的起点（亦称为本初子午线）">
+<meta name="keywords" content="MA806P blog iOS 技术博客 个人博客">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS NSDate">
+<meta property="og:url" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;2018&#x2F;03&#x2F;14&#x2F;nsdate&#x2F;index.html">
+<meta property="og:site_name" content="Peng&#39;s blog">
+<meta property="og:description" content="前言本篇文章总结一下在 iOS 开发中关于时间、日期的一些知识点。阅读本文你将会看到有关，NSDate、NSDateFormatter、NSTimeZone、NSLocale 、NSDateComponents、NSCalendar 的使用。 开始之前先来一波科普：  全球24个时区的划分在1884年国际会议上制定了全球性的标准时，明定以英国伦敦格林威治这个地方为零度经线的起点（亦称为本初子午线）">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2018&#x2F;nsdate-1.png">
+<meta property="og:updated_time" content="2019-11-29T07:59:04.140Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2018&#x2F;nsdate-1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: false,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yupeng.fun/2018/03/14/nsdate/"/>
+
+
+
+
+
+  <title>iOS NSDate | Peng's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Peng's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yupeng.fun/2018/03/14/nsdate/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="MA806P">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avator-default.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Peng's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">iOS NSDate</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-14T22:51:22+08:00">
+                2018-03-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>本篇文章总结一下在 iOS 开发中关于时间、日期的一些知识点。阅读本文你将会看到有关，NSDate、NSDateFormatter、NSTimeZone、NSLocale 、NSDateComponents、NSCalendar 的使用。</p>
+<p>开始之前先来一波科普：</p>
+<blockquote>
+<p>全球24个时区的划分<br>在1884年国际会议上制定了全球性的标准时，明定以英国伦敦格林威治这个地方为零度经线的起点（亦称为本初子午线），并以地球由西向东每24小时自转一周360°，订定每隔经度15°，时差1小时。而每15°的经线则称为该时区的中央经线，将全球划分为24个时区。</p>
+</blockquote>
+<blockquote>
+<p>格林威治标准时间GMT<br>      十七世纪，格林威治皇家天文台为了海上霸权的扩张计画而进行天体观测。1675年旧皇家观测所(Old Royal Observatory) 正式成立，到了1884年决定以通过格林威治的子午线作为划分地球东西两半球的经度零度。观测所门口墙上有一个标志24小时的时钟，显示当下的时间，对全球而言，这里所设定的时间是世界时间参考点，全球都以格林威治的时间作为标准来设定时间，这就是我们耳熟能详的「格林威治标准时间」(Greenwich Mean Time，简称G.M.T.)的由来。</p>
+</blockquote>
+<blockquote>
+<p>世界协调时间UTC<br>      UTC指的是Coordinated Universal Time－ 世界协调时间（又称世界标准时间、世界统一时间），是经过平均太阳时(以格林威治时间GMT为准)、地轴运动修正后的新时标以及以「秒」为单位的国际原子时所综合精算而成的时间。</p>
+</blockquote>
+<h4 id="NSTimeZone"><a href="#NSTimeZone" class="headerlink" title="NSTimeZone"></a>NSTimeZone</h4><p>NSTimeZone 时区信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// 创建时区</span><br><span class="line">NSTimeZone *zone1 = [[NSTimeZone alloc] initWithName:@&quot;Asia/Shanghai&quot;];</span><br><span class="line">NSTimeZone *zone2 = [NSTimeZone timeZoneWithName:@&quot;Asia/Shanghai&quot;];</span><br><span class="line">// 根据时区缩写创建</span><br><span class="line">NSTimeZone *zone4 = [NSTimeZone timeZoneWithAbbreviation:@&quot;HKT&quot;];</span><br><span class="line">// 根据零时区的秒数偏移量创建</span><br><span class="line">NSTimeZone *zone5 = [NSTimeZone timeZoneForSecondsFromGMT:28800];</span><br><span class="line"></span><br><span class="line">//Asia/Shanghai表示国内上海的时区名</span><br><span class="line">//用下面的方法来获取各时区对应的名称</span><br><span class="line">NSArray *nameArray = [NSTimeZone knownTimeZoneNames];</span><br><span class="line"></span><br><span class="line">//HKT = &quot;Asia/Hong_Kong&quot;</span><br><span class="line">//用下面的方法来获取所有时区对应的缩写数据</span><br><span class="line">NSDictionary *abbreviationDictionary = [NSTimeZone abbreviationDictionary];</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//获取时区信息</span><br><span class="line">    // 获取系统时区</span><br><span class="line">    NSTimeZone *zone1 = [NSTimeZone systemTimeZone];</span><br><span class="line">    // 获取本地时区</span><br><span class="line">    NSTimeZone *zone2 = [NSTimeZone localTimeZone];</span><br><span class="line">    // 获取默认时区</span><br><span class="line">    NSTimeZone *zone3 = [NSTimeZone defaultTimeZone];</span><br><span class="line"></span><br><span class="line">    // 计算该时区与 GMT 时区的时间差</span><br><span class="line">    NSInteger interval = [zone secondsFromGMT];</span><br></pre></td></tr></table></figure>
+
+<h3 id="NSLocale"><a href="#NSLocale" class="headerlink" title="NSLocale"></a>NSLocale</h3><p>NSLocale 类返回本地化信息，主要体现在”语言”和”区域格式”这两个设置项。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 用标示符创建</span><br><span class="line">NSLocale *locale1 = [[NSLocale alloc] initWithLocaleIdentifier:@&quot;zh_CN&quot;];</span><br><span class="line">// 返回系统初始本地化信息</span><br><span class="line">NSLocale *locale2 = [NSLocale systemLocale];</span><br><span class="line">// 一直保持在 cache 中，第一次用此方法实例化对象后，即使修改了本地化设定，也不改变</span><br><span class="line">NSLocale *locale3 = [NSLocale currentLocale];</span><br><span class="line">// 每次修改本地化设定，其实例化的对象也会随之改变</span><br><span class="line">NSLocale *locale4 = [NSLocale autoupdatingCurrentLocale];</span><br></pre></td></tr></table></figure>
+
+<h3 id="NSDate"><a href="#NSDate" class="headerlink" title="NSDate"></a>NSDate</h3><p>NSDate 用来获取时间数据<br>NSTimeInterval 秒数值 : typedef double NSTimeInterval</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">NSDate *date = [NSDate date];</span><br><span class="line">//打印的数据：Tue Mar 13 16:37:14 2018</span><br><span class="line">//获取到的是当前设备系统所在时区的时间</span><br><span class="line"></span><br><span class="line">        </span><br><span class="line">// 当前时间加 n 秒后的值</span><br><span class="line">NSDate *date1 = [NSDate dateWithTimeIntervalSinceNow:10];</span><br><span class="line">// 某个时间增加 n 秒后的值</span><br><span class="line">NSDate *date2 = [NSDate dateWithTimeInterval:10 sinceDate:date1];</span><br><span class="line">// 从 1970-01-01 00:00:00 (GMT) 增加 n 秒后的值</span><br><span class="line">NSDate *date3 = [NSDate dateWithTimeIntervalSince1970:10];</span><br><span class="line">// 从 2001-01-01 00:00:00 (GMT) 增加 n 秒后的值</span><br><span class="line">NSDate *date4 = [NSDate dateWithTimeIntervalSinceReferenceDate:10];</span><br><span class="line">// 未来某一个时间</span><br><span class="line">NSDate *date5 = [NSDate distantFuture];</span><br><span class="line">// 过去某一个时间</span><br><span class="line">NSDate *date6 = [NSDate distantPast];        </span><br><span class="line">// 指定时间间隔</span><br><span class="line">NSDate *date7 = [date dateByAddingTimeInterval:20];</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">//时间间隔，单位 秒</span><br><span class="line">    NSTimeInterval interval1 = [date timeIntervalSinceNow];</span><br><span class="line">    NSTimeInterval interval2 = [date2 timeIntervalSinceDate:date1];</span><br><span class="line">        </span><br><span class="line">    // 该时间 与 1970-01-01 00:00:00 (GMT) 的时间间隔</span><br><span class="line">    NSTimeInterval interval3 = [date timeIntervalSince1970];</span><br><span class="line">    //有时候时间戳，可能用到毫秒值，秒转化为毫秒</span><br><span class="line">    uint64 timeInt = interval3 * 1000;</span><br><span class="line">    NSLog(@&quot;%lf  %lld&quot;, interval3, timeInt); </span><br><span class="line">    //1520996792.058798  1520996792058</span><br><span class="line">        </span><br><span class="line">    // 该时间 与 2001-01-01 00:00:00 (GMT) 的时间间隔</span><br><span class="line">    NSTimeInterval interval4 = [date1 timeIntervalSinceReferenceDate];</span><br><span class="line">        </span><br><span class="line">    // 当前时间 与 2001-01-01 00:00:00 (GMT) 的时间间</span><br><span class="line">    NSTimeInterval interval5 = [NSDate timeIntervalSinceReferenceDate];</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">时间的比较</span><br><span class="line">    NSDate *date1 = [NSDate date];</span><br><span class="line">    NSDate *date2 = [date1 dateByAddingTimeInterval:10];</span><br><span class="line">      </span><br><span class="line">    // 判断两个时间是否相等</span><br><span class="line">    [date1 isEqualToDate:date2];</span><br><span class="line"></span><br><span class="line">    // 比较两个时间大小</span><br><span class="line">    NSComparisonResult result = [date1 compare:date2];</span><br><span class="line"></span><br><span class="line">    // 比较两个时间，返回 较早的时间</span><br><span class="line">    NSDate *date3 = [date1 earlierDate:date2];</span><br><span class="line">            </span><br><span class="line">    // 比较两个时间，返回 较晚的时间</span><br><span class="line">    NSDate *date4 = [date1 laterDate:date2];</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="NSDateFormatter"><a href="#NSDateFormatter" class="headerlink" title="NSDateFormatter"></a>NSDateFormatter</h3><p>NSDateFormatter 时间格式化，用于将日期和时间从其内部表示形式转换为文本形式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];</span><br><span class="line">dateFormatter.dateFormat = @&quot;yyyy-MM-dd HH:mm:ss&quot;;</span><br><span class="line">dateFormatter.timeZone = [NSTimeZone timeZoneWithName:@&quot;Asia/Shanghai&quot;];</span><br><span class="line"></span><br><span class="line">//NSDate 转换为 NSString</span><br><span class="line">NSString * nowDateStr = [dateFormatter stringFromDate:[NSDate date]];</span><br><span class="line">    </span><br><span class="line">//给定格式的日期字符串，转换为 NSDate</span><br><span class="line">//如果字符串格式不是dateFormat确定的格式，则返回值为空</span><br><span class="line">NSDate *timeDate = [dateFormatter dateFromString:@&quot;2018-03-13 16:20:48&quot;];</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//设置地区locale 不同，输出的时间格式也不同</span><br><span class="line">NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init]</span><br><span class="line">dateFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@&quot;en_US&quot;];</span><br><span class="line"></span><br><span class="line">dateFormatter.dateFormat = @&quot;EEE MMM dd HH:mm:ss&quot;;</span><br><span class="line">NSString * nowDateStr = [dateFormatter stringFromDate:[NSDate date]];</span><br><span class="line">//NSLocale设置为 en_US 输出为：  Tue Mar 13 19:34:53</span><br><span class="line">//zh_CN 输出为：周二 3月 13 19:35:36</span><br></pre></td></tr></table></figure>
+<br>
+
+<p> NSDateFormatter 常用的日期格式：</p>
+<table>
+<thead>
+<tr>
+<th>格式</th>
+<th>输出结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>yyyy-MM-dd</td>
+<td>2018-03-13</td>
+</tr>
+<tr>
+<td>MM dd yyyy</td>
+<td>03 13 2018</td>
+</tr>
+<tr>
+<td>yyyy-MM-dd HH:mm:ss</td>
+<td>2018-03-13 16:48:09</td>
+</tr>
+<tr>
+<td>EEE MMM dd HH:mm:ss</td>
+<td>周二 3月 13 19:35:36（zh_CN）<br>Tue Mar 13 19:34:53（en_US）</td>
+</tr>
+<tr>
+<td>yyyy-MM-dd a HH:mm:ss EEEE</td>
+<td>2018-03-13 下午 16:48:09 星期二（zh_CN）<br> 2018-03-13 PM 16:48:09 Tuesday (en_US)</td>
+</tr>
+<tr>
+<td>yyyy-MM-dd HH:mm:ss.SSS</td>
+<td>2018-03-13 16:48:12.319</td>
+</tr>
+</tbody></table>
+<br>
+
+<p> NSDateFormatter格式化参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>G</td>
+<td>公元[时代]，例如AD公元</td>
+</tr>
+<tr>
+<td>yy、yyyy</td>
+<td>年份， yy：年的后2位， yyyy：年 4位</td>
+</tr>
+<tr>
+<td>MM、MMM、MMMM</td>
+<td>月份<br>MM：显示为数字1-12，<br>MMM ：中英文显示有区别，如3月、Mar <br>MMMM：显示如 三月、March</td>
+</tr>
+<tr>
+<td>d、D、dd</td>
+<td>日<br>d：一个月中的第几天<br>D：一年中的第几天<br>dd：2位数表示，如02</td>
+</tr>
+<tr>
+<td>EEE、EEEE</td>
+<td>EEE：周几，中英文显示有区别，如周二、Tue<br>EEEE：星期几，如星期二、Tuesday</td>
+</tr>
+<tr>
+<td>w、W</td>
+<td>w：一年中的第几周<br>W：一个月中的第几周</td>
+</tr>
+<tr>
+<td>F</td>
+<td>月份包含几周，以7天为一个单位来统计周，与日历上的周几无关</td>
+</tr>
+<tr>
+<td>aa</td>
+<td>上午、下午，AM/PM</td>
+</tr>
+<tr>
+<td>H</td>
+<td>时，24小时制，0-23</td>
+</tr>
+<tr>
+<td>K</td>
+<td>时，12小时制，0-11</td>
+</tr>
+<tr>
+<td>m、mm</td>
+<td>m：分，1-2位<br>mm：分，2位</td>
+</tr>
+<tr>
+<td>s、ss、S</td>
+<td>s：秒，1-2位<br>ss：秒，2位<br>S：毫秒</td>
+</tr>
+</tbody></table>
+<br>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];</span><br><span class="line">dateFormatter.dateFormat = @&quot;yyyy年MM月dd日 HH点mm分ss秒 &apos;Date Test&apos;&quot;;</span><br><span class="line">NSString * nowDateStr = [dateFormatter stringFromDate:[NSDate date]];</span><br><span class="line">NSLog(@&quot; %@ &quot;, nowDateStr); </span><br><span class="line">//2018年03月13日 19点35分36秒 Date Test</span><br></pre></td></tr></table></figure>
+<br>
+
+<blockquote>
+<p><strong>注意</strong><br>在进行时间格式化时，别忘了设置时区 dateFormatter.timeZone = … ，macOS、iOS11 默认的是使用系统所在的时区，如果忘了设置时区从字符串转化为 NSDate 可能返回值为空，且如果忘记在不同的地区获取的时间会不同，这是个坑，要注意。</p>
+</blockquote>
+<br>
+
+<h3 id="NSCalendar、NSDateComponents"><a href="#NSCalendar、NSDateComponents" class="headerlink" title="NSCalendar、NSDateComponents"></a>NSCalendar、NSDateComponents</h3><p>NSDateComponents 封装了具体年月日、时秒分、周、季度等。将时间表示成方便使用的方式，通过 NSDateComponents 可以快速而简单地获取某个时间点对应的“年”，“月”，“日”，“时”，“分”，“秒”，“周”等信息。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];</span><br><span class="line">calendar.timeZone = [NSTimeZone timeZoneWithName:@&quot;Asia/Shanghai&quot;];</span><br><span class="line"></span><br><span class="line">NSDateComponents *components = [calendar components:</span><br><span class="line">                                        NSCalendarUnitWeekday|</span><br><span class="line">                                        NSCalendarUnitMonth|</span><br><span class="line">                                        NSCalendarUnitDay</span><br><span class="line">                                                   fromDate:nowDate];</span><br><span class="line"></span><br><span class="line">NSInteger week = components.weekday;//周几，1-周日，2-周一，...</span><br><span class="line">NSInteger month = components.month;</span><br><span class="line">NSInteger day = components.day;</span><br></pre></td></tr></table></figure>
+<p>NSCalendarUnit :</p>
+<p><img src="/images/2018/nsdate-1.png" alt="NSCalendarUnit"></p>
+<br>
+
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p><a href="https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/DatesAndTimes/DatesAndTimes.html#//apple_ref/doc/uid/10000039-SW1" target="_blank" rel="noopener">Date and Time Programming Guide</a><br><a href="http://userguide.icu-project.org/formatparse/datetime" target="_blank" rel="noopener">http://userguide.icu-project.org/formatparse/datetime</a><br><a href="http://www.cnblogs.com/QianChia/p/5782780.html" target="_blank" rel="noopener">http://www.cnblogs.com/QianChia/p/5782780.html</a><br><a href="http://www.cnblogs.com/QianChia/p/5782780.html" target="_blank" rel="noopener">http://www.cnblogs.com/QianChia/p/5782780.html</a><br><a href="https://www.douban.com/note/147740972/" target="_blank" rel="noopener">https://www.douban.com/note/147740972/</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    MA806P
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yupeng.fun/2018/03/14/nsdate/" title="iOS NSDate">http://yupeng.fun/2018/03/14/nsdate/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/25/iOS-purchase/" rel="next" title="iOS In-App Purchase">
+                <i class="fa fa-chevron-left"></i> iOS In-App Purchase
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/17/cocoapods/" rel="prev" title="CocoaPods的使用">
+                CocoaPods的使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avator-default.png"
+                alt="MA806P" />
+            
+              <p class="site-author-name" itemprop="name">MA806P</p>
+              <p class="site-description motion-element" itemprop="description">在希望的田野上 折腾着</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/MA806P" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:mayp126@126.com" target="_blank" title="邮箱">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>邮箱</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#NSTimeZone"><span class="nav-number">1.1.</span> <span class="nav-text">NSTimeZone</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NSLocale"><span class="nav-number">2.</span> <span class="nav-text">NSLocale</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NSDate"><span class="nav-number">3.</span> <span class="nav-text">NSDate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NSDateFormatter"><span class="nav-number">4.</span> <span class="nav-text">NSDateFormatter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NSCalendar、NSDateComponents"><span class="nav-number">5.</span> <span class="nav-text">NSCalendar、NSDateComponents</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reference"><span class="nav-number">6.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">MA806P</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

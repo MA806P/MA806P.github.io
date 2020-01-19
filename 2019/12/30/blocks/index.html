@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="本文介绍一下 iOS 中 Block 相关内容，总结 Block 相关的使用方法和注意事项。 Block 概述Block 也被称作闭包，是不带有名称的函数，匿名函数。相当于是一个代码块，把想要执行的代码封装在代码块里，等需要的时候调用。 Block 表达式语法：  返回值类型(^变量名)(参数) = ^返回值类型(参数){ 表达式 }int (^myBlock1)(int) = ^(int num">
+<meta name="keywords" content="MA806P blog iOS 技术博客 个人博客">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS Blocks 小结">
+<meta property="og:url" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;2019&#x2F;12&#x2F;30&#x2F;blocks&#x2F;index.html">
+<meta property="og:site_name" content="Peng&#39;s blog">
+<meta property="og:description" content="本文介绍一下 iOS 中 Block 相关内容，总结 Block 相关的使用方法和注意事项。 Block 概述Block 也被称作闭包，是不带有名称的函数，匿名函数。相当于是一个代码块，把想要执行的代码封装在代码块里，等需要的时候调用。 Block 表达式语法：  返回值类型(^变量名)(参数) = ^返回值类型(参数){ 表达式 }int (^myBlock1)(int) = ^(int num">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-12-31T10:04:58.983Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: false,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yupeng.fun/2019/12/30/blocks/"/>
+
+
+
+
+
+  <title>iOS Blocks 小结 | Peng's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Peng's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yupeng.fun/2019/12/30/blocks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="MA806P">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avator-default.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Peng's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">iOS Blocks 小结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-30T11:34:46+08:00">
+                2019-12-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文介绍一下 iOS 中 Block 相关内容，总结 Block 相关的使用方法和注意事项。</p>
+<h3 id="Block-概述"><a href="#Block-概述" class="headerlink" title="Block 概述"></a>Block 概述</h3><p>Block 也被称作闭包，是不带有名称的函数，匿名函数。相当于是一个代码块，把想要执行的代码封装在代码块里，等需要的时候调用。</p>
+<p>Block 表达式语法：</p>
+<blockquote>
+<p>返回值类型(^变量名)(参数) = ^返回值类型(参数){ 表达式 }<br>int (^myBlock1)(int) = ^(int num) { return num + 1; };<br>void (^myBlock2)(void) = ^(void){ NSLog(@”无参数，无返回值”); };  </p>
+</blockquote>
+<h3 id="Block-常见用法"><a href="#Block-常见用法" class="headerlink" title="Block 常见用法"></a>Block 常见用法</h3><p>在 OC 中经常会用到 Block。使用 Block 方便快捷，集中代码块，适用于轻便、简洁的回调，如网络传输等。下面介绍几种常见的用法：</p>
+<h5 id="1、声明为属性"><a href="#1、声明为属性" class="headerlink" title="1、声明为属性"></a>1、声明为属性</h5><p>可将 block 声明为某个类的属性，在别的地方初始化赋值之后，等待触发回调传值等操作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@property (nonatomic, copy) void(^blockName)(NSInteger type);</span><br><span class="line">someObj.blockName = ^(NSInteger type) &#123;</span><br><span class="line">    //...</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">//如要是觉得 block 语法书写别扭、不友好，也可使用 typedef 定义一个 block 类型，方便使用：</span><br><span class="line">typedef void(^BlockName)(NSInteger);</span><br><span class="line">@property (nonatomic, copy) BlockName blockName;</span><br></pre></td></tr></table></figure>
+
+<h5 id="2、作为方法参数调用"><a href="#2、作为方法参数调用" class="headerlink" title="2、作为方法参数调用"></a>2、作为方法参数调用</h5><p>当有时调用一个耗时的方法处理，不会立即返回，需要时间进行处理，当处理完成后告知调用者处理完毕，可进行后面的操作，在这样的情景下就可使用 block，例如网络请求回调。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">- (void)doSomethingParameters:(id)parameters completion: (void (^)(NSInteger type))completion &#123;</span><br><span class="line">    //...</span><br><span class="line">    completion(1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[self doSomethingParameters:nil completion:^(NSInteger type) &#123;</span><br><span class="line">    //处理完成，这里可进行后续操作...</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="Block-截获局部变量"><a href="#Block-截获局部变量" class="headerlink" title="Block 截获局部变量"></a>Block 截获局部变量</h3><p>如下面例子，定义一个 block，在代码块里打印变量 a，然后修改后调用 block 打印出的变量 a 的值不变。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">NSInteger a = 10;</span><br><span class="line">void (^blockName)(void) = ^&#123;</span><br><span class="line">    NSLog(@&quot;a = %ld&quot;, a);</span><br><span class="line">&#125;;</span><br><span class="line">blockName(); // a = 10</span><br><span class="line">a = 20;</span><br><span class="line">blockName(); // a = 10</span><br></pre></td></tr></table></figure>
+<p>为何修改后打印 a 的值不变，因为 Block 语法的表达式使用的是它之前声明的局部变量 a。Block 表达式截获所使用的局部变量的值，保存了该变量的瞬时值。所以在第二次执行 Block 表达式时，即使已经改变了局部变量 a 的值，也不会影响 Block 表达式在执行时所保存的局部变量的瞬时值。<br>这就是 Blocks 变量截获局部变量值的特性。</p>
+<p>在 Block 中只能使用保存的局部变量的瞬时值，并不能直接对其进行修改，想要修改需要在局部变量前加 __block 修饰。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">__block NSInteger a = 10;</span><br><span class="line">void (^blockName)(void) = ^&#123;</span><br><span class="line">    a = 30;</span><br><span class="line">&#125;;</span><br><span class="line">blockName(); // a = 10</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="Block-的循环引用问题"><a href="#Block-的循环引用问题" class="headerlink" title="Block 的循环引用问题"></a>Block 的循环引用问题</h3><p>如在 block 中使用了对象， block 会对使用的对象进行持有，如该对象同时持有该 block 则会造成循环引用的问题，互相持有不能释放。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">self.blockName = ^() &#123;</span><br><span class="line">    [self.delegate doSomething];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//解决方法，使用 __weak 进行修饰：</span><br><span class="line">__weak __typeof(self) weakSelf = self;</span><br><span class="line">self.blockName = ^() &#123;</span><br><span class="line">    [weakSelf.delegate doSomething];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p><a href="https://book.douban.com/subject/24720270/" target="_blank" rel="noopener">Objective-C高级编程</a><br><a href="https://juejin.im/post/5d1064fff265da1bb31c43fd" target="_blank" rel="noopener">Blocks 详尽总结</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    MA806P
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yupeng.fun/2019/12/30/blocks/" title="iOS Blocks 小结">http://yupeng.fun/2019/12/30/blocks/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/11/swift-oc/" rel="next" title="Swift、OC混用">
+                <i class="fa fa-chevron-left"></i> Swift、OC混用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avator-default.png"
+                alt="MA806P" />
+            
+              <p class="site-author-name" itemprop="name">MA806P</p>
+              <p class="site-description motion-element" itemprop="description">在希望的田野上 折腾着</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/MA806P" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:mayp126@126.com" target="_blank" title="邮箱">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>邮箱</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Block-概述"><span class="nav-number">1.</span> <span class="nav-text">Block 概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Block-常见用法"><span class="nav-number">2.</span> <span class="nav-text">Block 常见用法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1、声明为属性"><span class="nav-number">2.0.1.</span> <span class="nav-text">1、声明为属性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2、作为方法参数调用"><span class="nav-number">2.0.2.</span> <span class="nav-text">2、作为方法参数调用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Block-截获局部变量"><span class="nav-number">3.</span> <span class="nav-text">Block 截获局部变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Block-的循环引用问题"><span class="nav-number">4.</span> <span class="nav-text">Block 的循环引用问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">MA806P</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

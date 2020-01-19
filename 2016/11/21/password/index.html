@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="iOS 解锁," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="简介苹果从iPhone5S开始，具有指纹识别技术，从iOS8.0之后苹果允许第三方 App 使用 Touch ID进行身份验证。指纹识别Touch ID提供3+2共5次指纹识别机会（3次识别失败后，弹出的指纹验证框会消失，同时会报错code = -1，然后点击指纹会再次弹框可验证两次），如果五次指纹识别全部错误，就需要手动输入数字密码，数字密码可以输入6次，如果6次输入的数字密码都错误，系统会停止">
+<meta name="keywords" content="iOS 解锁">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS 指纹识别">
+<meta property="og:url" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;2016&#x2F;11&#x2F;21&#x2F;password&#x2F;index.html">
+<meta property="og:site_name" content="Peng&#39;s blog">
+<meta property="og:description" content="简介苹果从iPhone5S开始，具有指纹识别技术，从iOS8.0之后苹果允许第三方 App 使用 Touch ID进行身份验证。指纹识别Touch ID提供3+2共5次指纹识别机会（3次识别失败后，弹出的指纹验证框会消失，同时会报错code = -1，然后点击指纹会再次弹框可验证两次），如果五次指纹识别全部错误，就需要手动输入数字密码，数字密码可以输入6次，如果6次输入的数字密码都错误，系统会停止">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2016&#x2F;password-1.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2016&#x2F;password-2.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2016&#x2F;password-3.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2016&#x2F;password-4.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2016&#x2F;password-5.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2016&#x2F;password-6.png">
+<meta property="og:updated_time" content="2019-11-29T07:57:58.408Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2016&#x2F;password-1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: false,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yupeng.fun/2016/11/21/password/"/>
+
+
+
+
+
+  <title>iOS 指纹识别 | Peng's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Peng's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yupeng.fun/2016/11/21/password/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="MA806P">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avator-default.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Peng's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">iOS 指纹识别</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-11-21T21:55:05+08:00">
+                2016-11-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>苹果从iPhone5S开始，具有指纹识别技术，从iOS8.0之后苹果允许第三方 App 使用 Touch ID进行身份验证。指纹识别Touch ID提供3+2共5次指纹识别机会（3次识别失败后，弹出的指纹验证框会消失，同时会报错code = -1，然后点击指纹会再次弹框可验证两次），如果五次指纹识别全部错误，就需要手动输入数字密码，数字密码可以输入6次，如果6次输入的数字密码都错误，系统会停止验证，一定的间隔后才能再次输入密码验证，而且间隔会随着输入的次数增长。</p>
+<h1 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h1><p>1.首先导入框架LocalAuthentication<br>2.判断系统版本，最低iOS 8.0<br>3.创建验证对象上下文LAContext<br>4.判断指纹识别技术是否可用canEvaluatePolicy<br>5.如果可用，开始调用方法开始使用指纹识别</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#import &lt;LocalAuthentication/LocalAuthentication.h&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">//指纹按钮</span><br><span class="line">- (void)showFingerprintTouch</span><br><span class="line">&#123;</span><br><span class="line">    //系统支持，最低iOS 8.0</span><br><span class="line">    if ([UIDevice currentDevice].systemVersion.floatValue &gt;= 8.0)</span><br><span class="line">    &#123;</span><br><span class="line">        LAContext * context = [[LAContext alloc] init];</span><br><span class="line">        NSError * error;</span><br><span class="line">        if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&amp;error])</span><br><span class="line">        &#123;</span><br><span class="line">            </span><br><span class="line">            //localizedReason: 指纹识别出现时的提示文字</span><br><span class="line">            [context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:@&quot;指纹解锁&quot; reply:^(BOOL success, NSError * _Nullable error) &#123;</span><br><span class="line">                </span><br><span class="line">                if (success)</span><br><span class="line">                &#123;</span><br><span class="line">                    //识别成功</span><br><span class="line">                    dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">                            //在主线程中，处理 ......</span><br><span class="line">                    &#125;);</span><br><span class="line">                &#125;</span><br><span class="line">                else if (error)</span><br><span class="line">                &#123;</span><br><span class="line">                    NSLog(@&quot;LAPolicyDeviceOwnerAuthenticationWithBiometrics -- %@&quot;,error);</span><br><span class="line">                &#125;</span><br><span class="line">                </span><br><span class="line">            &#125;];</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">        else if([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthentication error:nil])</span><br><span class="line">        &#123;</span><br><span class="line">            [context evaluatePolicy:LAPolicyDeviceOwnerAuthentication localizedReason:@&quot;密码解锁&quot; reply:^(BOOL success, NSError * _Nullable error)&#123;</span><br><span class="line">                </span><br><span class="line">                NSLog(@&quot;LAPolicyDeviceOwnerAuthentication -- %@&quot;, error);</span><br><span class="line">                </span><br><span class="line">            &#125;];</span><br><span class="line">        &#125;</span><br><span class="line">        NSLog(@&quot; --- %@ &quot;, error);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="代码解析"><a href="#代码解析" class="headerlink" title="代码解析"></a>代码解析</h1><h5 id="指纹识别的策略"><a href="#指纹识别的策略" class="headerlink" title="指纹识别的策略"></a>指纹识别的策略</h5><p><code>[context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil]
+[context canEvaluatePolicy:LAPolicyDeviceOwnerAuthentication error:nil]</code></p>
+<p><img src="/images/2016/password-1.png" alt=""></p>
+<ul>
+<li>LAPolicyDeviceOwnerAuthenticationWithBiometrics ，指纹授权使用， 当设备不具有Touch ID的功能，或者在系统设置中没有设置开启指纹，授权将会失败。当指纹验证3+2次都没有通过的时候指纹验证就会被锁定，就需要先进行数字密码的解锁才能继续使用指纹密码。</li>
+</ul>
+<ul>
+<li>LAPolicyDeviceOwnerAuthentication，指纹和数字密码的授权使用，当指纹可用且没有被锁定，授权后会进入指纹密码验证。不然的话会进入数字密码验证的页面。当系统数字密码没有设置不可用的时候，授权失败。如果数字密码输入不正确，连续6次输入数字密码都不正确后，会停用鉴定过一定的间隔后才能使用，间隔时间依次增长，如图：<br><img src="/images/2016/password-2.png" alt=""></li>
+</ul>
+<ul>
+<li>弹出的指纹验证框的两个按钮的标题，可以通过下面的方法修改：<br><code>context.localizedCancelTitle = @&quot;取消&quot;;
+context.localizedFallbackTitle = @&quot;输入密码&quot;;</code></li>
+<li>localizedReason:是用来设置弹出框的提示内容的，一般写的是使用原因，如图：<br><img src="/images/2016/password-3.png" alt=""><br><img src="/images/2016/password-4.png" alt=""></li>
+</ul>
+<h5 id="错误情况"><a href="#错误情况" class="headerlink" title="错误情况"></a>错误情况</h5><p>官方文档中给出的错误情况，有以下几种，如图：</p>
+<p><img src="/images/2016/password-5.png" alt=""></p>
+<p><img src="/images/2016/password-6.png" alt=""></p>
+<p>简单介绍几种常出现的错误</p>
+<blockquote>
+<p>3次验证失败后报错<br>Error Domain=com.apple.LocalAuthentication Code=-1 “Application retry limit exceeded.” UserInfo={NSLocalizedDescription=Application retry limit exceeded</p>
+</blockquote>
+<h1 id=""><a href="#" class="headerlink" title=""></a></h1><blockquote>
+<p>用户取消<br>Error Domain=com.apple.LocalAuthentication Code=-2</p>
+</blockquote>
+<h1 id="-1"><a href="#-1" class="headerlink" title=""></a></h1><blockquote>
+<p>用户在弹出的指纹验证框中，点击输入密码<br>Error Domain=com.apple.LocalAuthentication Code=-3 “Fallback authentication mechanism selected.”<br>可以判断这种错误 error.code == -3，进行后面的操作</p>
+</blockquote>
+<h1 id="-2"><a href="#-2" class="headerlink" title=""></a></h1><blockquote>
+<p>设备没有设置指纹报错<br>Error Domain=com.apple.LocalAuthentication Code=-7 “No fingers are enrolled with Touch ID.” </p>
+</blockquote>
+<h1 id="-3"><a href="#-3" class="headerlink" title=""></a></h1><blockquote>
+<p>3+2次指纹验证都失败后报错，这种情况指纹解锁会被锁定，输入数字密码真确后才能再次进行指纹验证<br>Error Domain=com.apple.LocalAuthentication Code=-8 “Biometry is locked out.”</p>
+</blockquote>
+<h1 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h1><ul>
+<li><p>识别成功后在主线程上处理<br>  识别成功后，不是在主线程上，如果不切换到主线程上，后面的不会及时处理。</p>
+</li>
+<li><p>如果不写后面canEvaluatePolicy:LAPolicyDeviceOwnerAuthentication判断，在iOS 10 上会遇到一个问题就是，在你验证了3+2次指纹都没成功之后，系统不会弹出输入密码的验证页面，点击指纹验证按钮也没有反应。但是在iOS9中5次验证失败之后点击再次验证，系统会弹出输入数字密码的页面。</p>
+</li>
+</ul>
+<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>附上带有指纹、手势和数字密码解锁的例子。传送门 <a href="https://github.com/MA806P/PasscodeLock" target="_blank" rel="noopener">GitHub - PasscodeLock</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    MA806P
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yupeng.fun/2016/11/21/password/" title="iOS 指纹识别">http://yupeng.fun/2016/11/21/password/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS-%E8%A7%A3%E9%94%81/" rel="tag"> <i class="fa fa-tag"></i> iOS 解锁</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/04/lldb/" rel="prev" title="LLDB调试器">
+                LLDB调试器 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avator-default.png"
+                alt="MA806P" />
+            
+              <p class="site-author-name" itemprop="name">MA806P</p>
+              <p class="site-description motion-element" itemprop="description">在希望的田野上 折腾着</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/MA806P" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:mayp126@126.com" target="_blank" title="邮箱">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>邮箱</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用方法"><span class="nav-number">2.</span> <span class="nav-text">使用方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码解析"><span class="nav-number">3.</span> <span class="nav-text">代码解析</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#指纹识别的策略"><span class="nav-number">3.0.0.0.1.</span> <span class="nav-text">指纹识别的策略</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#错误情况"><span class="nav-number">3.0.0.0.2.</span> <span class="nav-text">错误情况</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">4.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#-1"><span class="nav-number">5.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#-2"><span class="nav-number">6.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#-3"><span class="nav-number">7.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#注意事项"><span class="nav-number">8.</span> <span class="nav-text">注意事项</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#最后"><span class="nav-number">9.</span> <span class="nav-text">最后</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">MA806P</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
