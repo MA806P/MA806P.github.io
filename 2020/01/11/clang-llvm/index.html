@@ -79,15 +79,18 @@
 
 
 
-<meta name="description" content="在希望的田野上 折腾着">
+<meta name="description" content="本文将简单介绍 Clang LLVM 相关的知识，然后介绍一下代码是如何一步步的编译运行的，以及可以利用 clang 能做些什么。 简介编译器就是语言翻译器，把高级语言翻译成计算机能够执行的机器语言。语言翻译主要工作流程：源代码 (source code) → 预处理器 (preprocessor) → 编译器 (compiler) → 目标代码 (object code) → 链接器 (link">
 <meta name="keywords" content="MA806P blog iOS 技术博客 个人博客">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Peng&#39;s blog">
-<meta property="og:url" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;archives&#x2F;2017&#x2F;09&#x2F;index.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Clang LLVM 简介">
+<meta property="og:url" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;2020&#x2F;01&#x2F;11&#x2F;clang-llvm&#x2F;index.html">
 <meta property="og:site_name" content="Peng&#39;s blog">
-<meta property="og:description" content="在希望的田野上 折腾着">
+<meta property="og:description" content="本文将简单介绍 Clang LLVM 相关的知识，然后介绍一下代码是如何一步步的编译运行的，以及可以利用 clang 能做些什么。 简介编译器就是语言翻译器，把高级语言翻译成计算机能够执行的机器语言。语言翻译主要工作流程：源代码 (source code) → 预处理器 (preprocessor) → 编译器 (compiler) → 目标代码 (object code) → 链接器 (link">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2020&#x2F;clang-llvm-1.png">
+<meta property="og:updated_time" content="2020-03-14T15:38:40.333Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2020&#x2F;clang-llvm-1.png">
 
 
 
@@ -117,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yupeng.fun/archives/2017/09/"/>
+  <link rel="canonical" href="http://yupeng.fun/2020/01/11/clang-llvm/"/>
 
 
 
 
 
-  <title>归档 | Peng's blog</title>
+  <title>Clang LLVM 简介 | Peng's blog</title>
   
 
 
@@ -142,7 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -226,73 +229,174 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
-
-      <span class="archive-page-counter">
-        
-        
-         
-        
-        OK! 目前共计 32 篇日志。 继续努力。
-      </span>
-
-      
-
-        
-        
-        
-
-        
-          
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2017">2017</h1>
-          </div>
-        
-        
-
-        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yupeng.fun/2020/01/11/clang-llvm/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="MA806P">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avator-default.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Peng's blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2017/09/11/extension/" itemprop="url">
-              
-                <span itemprop="name">Application-Extension（一）：介绍</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">Clang LLVM 简介</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-09-11T17:59:33+08:00"
-              content="2017-09-11" >
-          09-11
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-11T21:20:29+08:00">
+                2020-01-11
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
 
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
+      
 
+      
+        <p>本文将简单介绍 Clang LLVM 相关的知识，然后介绍一下代码是如何一步步的编译运行的，以及可以利用 clang 能做些什么。</p>
+<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>编译器就是语言翻译器，把高级语言翻译成计算机能够执行的机器语言。<br>语言翻译主要工作流程：<br>源代码 (source code) → 预处理器 (preprocessor) → 编译器 (compiler) → 目标代码 (object code) → 链接器 (linker) → 可执行程序 (executables)</p>
+<p>LLVM (Low Level Virtual Machine) 是一个开源的编译器架构。Clang 是 LLVM 的一个编译器前端，它目前支持 C, C++, Objective-C 等编程语言。</p>
+<p>Clang 对源程序进行预处理、词法分析、语法分析、语义分析，并将分析结果转换为 Abstract Syntax Tree ( 抽象语法树 ) ，最后使用 LLVM 作为编译器后端代码的生成器。</p>
+<p>Clang 的开发目标是提供一个可以替代 GCC 的前端编译器。Apple 对 Objective-C 新增很多特性，想做的很多功能，比如更好的IDE支持，GCC 不能很好的支持，于是，苹果开发了 Clang 与 LLVM 来完全取代GCC。Clang作为编译器前端，LLVM作为编译器后端。</p>
+<p><img src="/images/2020/clang-llvm-1.png" alt=""></p>
+<p>与 GCC 相比，Clang 是一个重新设计的编译器前端，具有一系列优点，例如模块化，代码简单易懂，占用内存小以及容易扩展和重用等。由于 Clang 在设计上的优异性，使得 Clang 非常适合用于设计源代码级别的分析和转化工具。Clang 也已经被应用到一些重要的开发领域，如 Static Analysis 是一个基于 Clang 的静态代码分析工具。</p>
+<h3 id="用Clang编译OC的程序"><a href="#用Clang编译OC的程序" class="headerlink" title="用Clang编译OC的程序"></a>用Clang编译OC的程序</h3><p>命令：clang -fobjc-arc -framework Foundation test.m  -o test<br>命令解释：-fobjc-arc 表示编译器需要支持ARC特性，这样才能理解新添加的指令<br>-framework Foundation 表示引用Foundation框架，这个框架定义了很多基本的类，是程序的基础框架。<br>test.m  编译的源代码文件名。<br>-o test 表示输出的可执行为难的文件名字是test。<br>        4）编译完成之后会在当前目录生成test<br>        5）在终端执行该文件，输入命令：./test<br>        6）点击回车，在终端中得到如下的输出：</p>
+<p>Hello,World!</p>
+<h5 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h5><p><a href="https://llvm.org/" target="_blank" rel="noopener">https://llvm.org/</a></p>
+<p><a href="https://www.cnblogs.com/wfwenchao/p/5543595.html" target="_blank" rel="noopener">https://www.cnblogs.com/wfwenchao/p/5543595.html</a><br><a href="https://www.ibm.com/developerworks/cn/opensource/os-cn-clang/index.html" target="_blank" rel="noopener">https://www.ibm.com/developerworks/cn/opensource/os-cn-clang/index.html</a></p>
+
+      
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    MA806P
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yupeng.fun/2020/01/11/clang-llvm/" title="Clang LLVM 简介">http://yupeng.fun/2020/01/11/clang-llvm/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/30/blocks/" rel="next" title="iOS Blocks 小结">
+                <i class="fa fa-chevron-left"></i> iOS Blocks 小结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -300,6 +404,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -320,8 +428,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -398,6 +515,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用Clang编译OC的程序"><span class="nav-number">2.</span> <span class="nav-text">用Clang编译OC的程序</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Reference"><span class="nav-number">2.0.1.</span> <span class="nav-text">Reference</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -559,6 +692,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
