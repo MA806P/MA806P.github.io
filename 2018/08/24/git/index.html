@@ -79,16 +79,16 @@
 
 
 
-<meta name="description" content="原文链接：http:&#x2F;&#x2F;yupeng.fun&#x2F;2018&#x2F;08&#x2F;24&#x2F;git&#x2F;  每个项目都有一个 Git 目录（译注：如果 git clone 出来的话，就是其中 .git 的目录；如果 git clone –bare 的话，新建的目录本身就是 Git 目录。），它是 Git 用来保存元数据和对象数据库的地方。该目录非常重要，每次克隆镜像仓库的时候，实际拷贝的就是这个目录里面的数据。 1、基本的">
+<meta name="description" content="每个项目都有一个 Git 目录（译注：如果 git clone 出来的话，就是其中 .git 的目录；如果 git clone –bare 的话，新建的目录本身就是 Git 目录。），它是 Git 用来保存元数据和对象数据库的地方。该目录非常重要，每次克隆镜像仓库的时候，实际拷贝的就是这个目录里面的数据。 1、基本的 Git 工作流程如下：在工作目录中修改某些文件。对修改后的文件进行快照，然后保存">
 <meta name="keywords" content="MA806P blog iOS 技术博客 个人博客">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Git 使用小记">
 <meta property="og:url" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;2018&#x2F;08&#x2F;24&#x2F;git&#x2F;index.html">
 <meta property="og:site_name" content="Peng&#39;s blog">
-<meta property="og:description" content="原文链接：http:&#x2F;&#x2F;yupeng.fun&#x2F;2018&#x2F;08&#x2F;24&#x2F;git&#x2F;  每个项目都有一个 Git 目录（译注：如果 git clone 出来的话，就是其中 .git 的目录；如果 git clone –bare 的话，新建的目录本身就是 Git 目录。），它是 Git 用来保存元数据和对象数据库的地方。该目录非常重要，每次克隆镜像仓库的时候，实际拷贝的就是这个目录里面的数据。 1、基本的">
+<meta property="og:description" content="每个项目都有一个 Git 目录（译注：如果 git clone 出来的话，就是其中 .git 的目录；如果 git clone –bare 的话，新建的目录本身就是 Git 目录。），它是 Git 用来保存元数据和对象数据库的地方。该目录非常重要，每次克隆镜像仓库的时候，实际拷贝的就是这个目录里面的数据。 1、基本的 Git 工作流程如下：在工作目录中修改某些文件。对修改后的文件进行快照，然后保存">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2018&#x2F;git-1.png">
-<meta property="og:updated_time" content="2020-03-17T10:01:22.770Z">
+<meta property="og:updated_time" content="2020-03-18T01:23:38.664Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2018&#x2F;git-1.png">
 
@@ -315,10 +315,7 @@
       
 
       
-        <blockquote>
-<p>原文链接：<a href="http://yupeng.fun/2018/08/24/git/">http://yupeng.fun/2018/08/24/git/</a></p>
-</blockquote>
-<p>每个项目都有一个 Git 目录（译注：如果 git clone 出来的话，就是其中 .git 的目录；如果 git clone –bare 的话，新建的目录本身就是 Git 目录。），它是 Git 用来保存元数据和对象数据库的地方。该目录非常重要，每次克隆镜像仓库的时候，实际拷贝的就是这个目录里面的数据。</p>
+        <p>每个项目都有一个 Git 目录（译注：如果 git clone 出来的话，就是其中 .git 的目录；如果 git clone –bare 的话，新建的目录本身就是 Git 目录。），它是 Git 用来保存元数据和对象数据库的地方。该目录非常重要，每次克隆镜像仓库的时候，实际拷贝的就是这个目录里面的数据。</p>
 <h3 id="1、基本的-Git-工作流程如下："><a href="#1、基本的-Git-工作流程如下：" class="headerlink" title="1、基本的 Git 工作流程如下："></a>1、基本的 Git 工作流程如下：</h3><p>在工作目录中修改某些文件。<br>对修改后的文件进行快照，然后保存到暂存区域。<br>提交更新，将保存在暂存区域的文件快照永久转储到 Git 目录中。</p>
 <h3 id="2、-Git-配置"><a href="#2、-Git-配置" class="headerlink" title="2、 Git 配置"></a>2、 Git 配置</h3><p>在使用 Git 前需要配置一些信息，方便之后变更提交的管理。<br>配置 user 信息：</p>
 <blockquote>
