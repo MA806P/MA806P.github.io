@@ -88,7 +88,7 @@
 <meta property="og:description" content="每个项目都有一个 Git 目录（译注：如果 git clone 出来的话，就是其中 .git 的目录；如果 git clone –bare 的话，新建的目录本身就是 Git 目录。），它是 Git 用来保存元数据和对象数据库的地方。该目录非常重要，每次克隆镜像仓库的时候，实际拷贝的就是这个目录里面的数据。 1、基本的 Git 工作流程如下：在工作目录中修改某些文件。对修改后的文件进行快照，然后保存">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2018&#x2F;git-1.png">
-<meta property="og:updated_time" content="2020-03-18T01:23:38.664Z">
+<meta property="og:updated_time" content="2020-03-23T08:09:25.651Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2018&#x2F;git-1.png">
 
@@ -353,7 +353,9 @@
 <p><img src="/images/2018/git-1.png" alt=""></p>
 <p>git stash  在工作区修改了文件，还没add，然后有其他紧急的事要处理，用这个命令可保存修改<br>git stash list  显示保存的列表<br>git stash apply 把保存的恢复到工作区，而且这条保存的信息会保留<br>git stash pop 把保存的恢复到工作区，这条保存的信息会删除</p>
 <h6 id="D、-分支"><a href="#D、-分支" class="headerlink" title="D、 分支"></a>D、 分支</h6><p>git branch -av 查看分支<br>git checkout xxx 切换分支到xxx<br>git checkout -b xxx 新建分支 xxx 并切换到分支上去<br>git checkout -b 本地分支名 origin/远程分支名  （从远程仓库里拉取一条本地不存在的分支，会自动创建一个新的本地分支，并与指定的远程分支关联起来。）<br>git branch -d xxx 删除分支，如果分支没有 merge 会有提示</p>
-<p>git merge，rebase 的区别<br>它们都被设计来将一个分支的更改并入另一个分支，只不过方式有些不同。<br>merge：不会改变两个分支已有的版本历史，只会把两个分支合并后创建出一个新的 commit 出来。<br>        merge是一个安全的操作。现有的分支不会被更改<br>rebase：假设当前在 A 分支，要基于 B 分支做 rebase，那么会先找到A和B的最近的公共祖先C，<br>        从C到A之间所有 commit，都基于 B 重新生成新的 commit。<br>        rebase 通常会修改某个分支的历史。<br>        rebase最大的好处是你的项目历史会非常整洁，项目历史是线性的。<br>        不像 merge 那样引入不必要的合并提交。<br>        这种简单的提交历史会带来两个后果：安全性和可跟踪性。<br>        如果你违反了 rebase 黄金法则，重写项目历史可能会给你的协作工作流带来灾难性的影响。<br>        此外，rebase 不会有合并提交中附带的信息——你看不到分支中并入了上游的哪些更改。<br>        rebase 的黄金法则便是，绝不要在公共的分支上使用它。</p>
+<p>fe37900<br>分支合并：<br>git merge b1<br>        把分支b1，合并到当前分支上。<br>        同时b1上的历史commit信息也会合并到当前分支上。<br>git merge –squash b1<br>        把分支b1，合并到当前分支上。<br>        这时只是把b1的内容合并，还没有提交，还需要commit命令提交。<br>        相当于把b1分支上的多个commit合并成一个，放在当前分支上。<br>        b1分支上的commit历史没有拿过来。</p>
+<p>git merge，rebase 的区别<br>它们都被设计来将一个分支的更改并入另一个分支，只不过方式有些不同。<br>merge：<br>        不会改变两个分支已有的版本历史，只会把两个分支合并后创建出一个新的 commit 出来。<br>        merge是一个安全的操作。现有的分支不会被更改</p>
+<p>rebase：<br>        假设当前在 A 分支，要基于 B 分支做 rebase，那么会先找到A和B的最近的公共祖先C，<br>        从C到A之间所有 commit，都基于 B 重新生成新的 commit。<br>        rebase 通常会修改某个分支的历史。<br>        rebase最大的好处是你的项目历史会非常整洁，项目历史是线性的。<br>        不像 merge 那样引入不必要的合并提交。<br>        这种简单的提交历史会带来两个后果：安全性和可跟踪性。<br>        如果你违反了 rebase 黄金法则，重写项目历史可能会给你的协作工作流带来灾难性的影响。<br>        此外，rebase 不会有合并提交中附带的信息——你看不到分支中并入了上游的哪些更改。<br>        rebase 的黄金法则便是，绝不要在公共的分支上使用它。</p>
 <h6 id="E、pull-push"><a href="#E、pull-push" class="headerlink" title="E、pull  push"></a>E、pull  push</h6><p>git pull 命令等同于先做了git fetch ，再做 git merge。即：<br>git fetch origin 分支<br>git checkout 分支<br>git merge origin/分支</p>
 <p>git pull origin &lt;远程分支名&gt;:&lt;本地分支名&gt;   将远程指定分支，拉取到本地指定分支上<br>git pull origin &lt;远程分支名&gt; 将远程指定分支，拉取到本地当前分支上<br>git pull origin             将本地当前分支同名的远程分支，拉取到本地当前分支上(需先关联远程分支)</p>
 <p>git push origin &lt;本地分支名&gt;:&lt;远程分支名&gt; 将本地当前分支，推送到远程指定分支上（注意：pull是远程在前本地在后，push相反）<br>git push origin &lt;本地分支名&gt; 将本地当前分支，推送到与本地当前分支同名的远程分支上<br>git push origin            将本地当前分支，推送到与本地当前分支同名的远程分支上(需先关联远程分支)<br>git push –set-upstream origin &lt;本地分支名&gt;   将本地分支与远程同名分支相关联。如果远程仓库不存在该分支，推送到远程仓库。</p>
