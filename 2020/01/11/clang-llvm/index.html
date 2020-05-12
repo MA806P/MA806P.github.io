@@ -93,7 +93,7 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2020&#x2F;clang-llvm-4.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2020&#x2F;clang-llvm-5.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2020&#x2F;clang-llvm-6.png">
-<meta property="og:updated_time" content="2020-03-25T08:59:30.072Z">
+<meta property="og:updated_time" content="2020-05-12T09:12:01.717Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2020&#x2F;clang-llvm-1.png">
 
@@ -474,12 +474,19 @@
 <br>
 
 <h3 id="将-OC-代码转换为-C-C"><a href="#将-OC-代码转换为-C-C" class="headerlink" title="将 OC 代码转换为 C/C++"></a>将 OC 代码转换为 C/C++</h3><p>当需要查看 OC 代码底层实现时，可以利用 clang 将 OC 代码转换为 C/C++ 代码。<br>下面命令可以进行转换：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clang -rewrite-objc main.m</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">clang -rewrite-objc main.m</span><br><span class="line"></span><br><span class="line">//-fobjc-arc 表示ARC环境。-fobjc-runtime 表示当前运行时环境。</span><br><span class="line">clang -rewrite-objc -fobjc-arc -fobjc-runtime=macosx-10.15 main.m</span><br></pre></td></tr></table></figure>
 <p>执行后，可在当前文件夹下生成 main.cpp 文件。</p>
 <p>当 .m 文件包含系统头文件时，会报错找不到头文件，可以指定SDK解决：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clang -x objective-c -rewrite-objc -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk main.m</span><br></pre></td></tr></table></figure>
 <p>或者</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">xcrun -sdk iphonesimulator13.2 clang -rewrite-objc main.m</span><br><span class="line">//其中的 sdk iphonesimulator13.2 可以通过命令 xcodebuild -showsdks 来查看</span><br></pre></td></tr></table></figure>
+
+
+
+<p>或者使用下面命令，指定了 SDK 和架构，转换后的代码会少一些：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xcrun -sdk iphoneos clang -arch arm64 -w -rewrite-objc main.m</span><br></pre></td></tr></table></figure>
+
+
 
 <br>
 
