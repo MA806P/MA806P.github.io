@@ -92,7 +92,7 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2019&#x2F;block-1.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2019&#x2F;block-4.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2019&#x2F;block-5.png">
-<meta property="og:updated_time" content="2020-05-12T09:56:53.250Z">
+<meta property="og:updated_time" content="2020-05-13T06:49:30.439Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2019&#x2F;block-2.png">
 
@@ -389,7 +389,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">void (^blockName)(void) = ^&#123; NSLog(@&quot;block&quot;); &#125;;</span><br><span class="line">int main() &#123;</span><br><span class="line">    blockName();</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>因为在使用全局变量的地方不能使用自动变量，所以就不存在堆自动变量进行截获。此种类型的 Block 结构体实例内容不依赖于执行的状态，所以整个程序只需一个实例，将 Block 用结构体实例设置在与全局变量相同的数据区域中即可。<br>总结来说就是，在全局变量有 Block 语法时，Block 语法的表达式不使用截获的自动变量时，Block 为 _NSConcreteGlobalBlock 类对象。</p>
 <h5 id="NSConcreteMallocBlock"><a href="#NSConcreteMallocBlock" class="headerlink" title="_NSConcreteMallocBlock"></a>_NSConcreteMallocBlock</h5><p>配置在全局变量上的 Block 在变量作用域外也可以通过指针访问使用，但是配置在栈上的 Block 若其所在变量作用域结束，该 Block 就被废弃，同样的 <em>__block</em> 变量也配置在栈上，若所在变量作用域结束，则该 <em>__block</em> 变量也会被废弃。</p>
-<p>因此提供了将 Block 和 <em>__block</em> 变量从栈上复制到堆上的方法来解决这个问题，从栈上复制到堆上，即使变量作用域结束，堆上的 Block 还可以继续存在。<br>复制到堆上的 Block 将 _NSConcreteMallocBlock 类对象写入到 Block 结构体实例的成员变量 isa:  <em>impl.isa = &amp;_NSConcreteMallocBlock;</em><br>__block 变量的结构体成员变量 __forwarding 可以实现无论 __block 变量配置在栈上，还是堆上都能正确的访问 __block 变量。</p>
+<p>因此提供了将 Block 和 <em>__block</em> 变量从栈上复制到堆上的方法来解决这个问题，从栈上复制到堆上，即使变量作用域结束，堆上的 Block 还可以继续存在。<br>复制到堆上的 Block 将 _NSConcreteMallocBlock 类对象写入到 Block 结构体实例的成员变量 isa:  <em>impl.isa = &amp;_NSConcreteMallocBlock;</em><br><em>\</em>block 变量的结构体成员变量 __forwarding 可以实现无论 __block 变量配置在栈上，还是堆上都能正确的访问 __block 变量。</p>
 <p>在 ARC 模式下，编译器会判断，自动生成将 Block 从栈上复制到堆上的代码。但是当，向方法或函数的参数中传递 Block 时，需要手动复制，如下面的代码。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">- (NSArray *)getBlockArray &#123;</span><br><span class="line">    int val = 10;</span><br><span class="line">    //需要使用 copy 复制，不然函数执行完成，栈上的 Block 被废弃，执行报错</span><br><span class="line">    return [NSArray arrayWithObjects:</span><br><span class="line">            [^&#123;NSLog(@&quot;blk0: %d&quot;, val);&#125; copy],</span><br><span class="line">            [^&#123;NSLog(@&quot;blk1: %d&quot;, val);&#125; copy] , nil];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">NSArray *tempArray = [self getBlockArray];</span><br><span class="line">void(^blk)(void) = [tempArray objectAtIndex:0];</span><br><span class="line">blk();</span><br></pre></td></tr></table></figure>
 
@@ -448,10 +448,13 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">__weak __typeof(self) weakSelf = self;</span><br><span class="line">self.blockName = ^() &#123;</span><br><span class="line">		__strong typeof(weakSelf) strongSelf = weakSelf;</span><br><span class="line">    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^&#123;</span><br><span class="line">            [strongSelf.delegate doSomething];</span><br><span class="line">        &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <p>有的情况下 block 会延迟调用，在 block 未调用前 self 可能 已经释放掉了，这时再在 block 使用 weakSelf ，weakSelf 为空了。在 block 里面使用的 __strong 修饰的 weakSelf 是为了在函数生命周期中防止 self 提前释放。strongSelf 是一个自动变量当 block 执行完毕就会释放自动变量 strongSelf ，不会对 self 进行一直进行强引用。</p>
-<p>总结来说就是，weakSelf 是为了 block 不持有 self，避免循环引用。strongSelf 防止 self 提前释放。</p>
+<p>另外要注意的是，有些情况在 block 未执行的时候，self 就已经释放掉了，block 在执行时 strongSelf 还是 nil，为了安全，最好还是在执行时判断 strongSelf == nil.</p>
+<p>总结来说就是，weakSelf 是为了 block 不持有 self，避免循环引用。strongSelf 防止 block 在执行的过程中 self 提前释放。</p>
 <br>
 
-<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p><a href="https://book.douban.com/subject/24720270/" target="_blank" rel="noopener">Objective-C高级编程</a><br><a href="https://www.jianshu.com/p/701da54bd78c" target="_blank" rel="noopener">深入研究Block</a></p>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p><a href="https://book.douban.com/subject/24720270/" target="_blank" rel="noopener">Objective-C高级编程</a></p>
+<p><a href="https://www.jianshu.com/p/701da54bd78c" target="_blank" rel="noopener">深入研究Block</a></p>
+<p><a href="https://www.galloway.me.uk/2013/05/a-look-inside-blocks-episode-3-block-copy/" target="_blank" rel="noopener">A look inside blocks</a></p>
 
       
     </div>
