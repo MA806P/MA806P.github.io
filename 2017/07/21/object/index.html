@@ -91,7 +91,7 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2017&#x2F;objectc-2.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2017&#x2F;objectc-3.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2017&#x2F;objectc-11.png">
-<meta property="og:updated_time" content="2020-05-05T04:50:22.927Z">
+<meta property="og:updated_time" content="2020-05-30T02:39:22.992Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2017&#x2F;objectc-1.png">
 
@@ -320,7 +320,7 @@
       
         <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>OC是C语言的超集，是扩充C的面向对象编程语言。OC的语法基本上是照搬C语言的，对象所占内存总是分配在“堆空间”中，而绝不会分配在“栈”上。<br>每个OC对象实例都是指向某块内存数据的指针，所以声明变量时，类型后面要跟一个 * 字符，有时会遇到定义里不含 * 的变量它们可能会使用栈空间，这些变量保存的不是OC对象，比如CGRect是c的结构体。</p>
 <p>例如： NSString * pointerVar = @“aa”;<br>pointerVar存放内存地址的变量，NSString自身的数据就存于那个地址中。可以说，变量指向NSString实例。<br>特殊类型id，能代指任意OC对象类型。id本身已经是指针。可以写为 id pointerVar = @“aa”; 区别在于，如果声明指定了具体类型，那么在该类实例上调用其所没有的方法时，编译器会探知此情况，并发出警告信息。</p>
-<h3 id="OC对象底层实现"><a href="#OC对象底层实现" class="headerlink" title="OC对象底层实现"></a>OC对象底层实现</h3><p>了解了OC对象之后，来看看OC的对象是怎样通过C语言来进行实现的。由于水平有限，只能简单梳理一下，有兴趣的可查看苹果源码<a href="https://opensource.apple.com/source/objc4/" target="_blank" rel="noopener">https://opensource.apple.com/source/objc4</a>，进行深入了解。<br><br></p>
+<h3 id="OC对象底层实现"><a href="#OC对象底层实现" class="headerlink" title="OC对象底层实现"></a>OC对象底层实现</h3><p>了解了OC对象之后，来看看OC的对象是怎样通过C语言来进行实现的。由于水平有限，只能简单梳理一下，有兴趣的可查看苹果源码 <a href="https://opensource.apple.com/tarballs/objc4/" target="_blank" rel="noopener">https://opensource.apple.com/tarballs/objc4/</a> ，进行深入了解。<br><br></p>
 <h5 id="OC-对象都是-C-语言结构体"><a href="#OC-对象都是-C-语言结构体" class="headerlink" title="OC 对象都是 C 语言结构体"></a>OC 对象都是 C 语言结构体</h5><p>描述OC对象所用的数据结构定义在运行期程序库的头文件里，每个对象结构体的首个成员是Class类的变量，该变量定义了对象所属的类，通常称为 is a 指针。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@interface NSObject &lt;NSObject&gt; &#123;</span><br><span class="line">    Class isa  OBJC_ISA_AVAILABILITY;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">typedef struct objc_class *Class;</span><br><span class="line">typedef struct objc_object *id;</span><br></pre></td></tr></table></figure>
@@ -381,13 +381,8 @@
 </blockquote>
 <p>2、init 方法：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- (id)init &#123;</span><br><span class="line">    return _objc_rootInit(self);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<pre><code>id
-_objc_rootInit(id obj)
-{
-    // In practice, it will be hard to rely on this function.
-    // Many classes do not properly chain -init calls.
-    return obj;
-}</code></pre><p>从此可知 init 方法只是调用了 _objc_rootInit 并返回了当前对象<br>alloc 方法会返回一个合法的没有初始化的实例对象。每一个发送到实例的消息会被翻译为objc_msgSend() 函数的调用，它的参数是指向 alloc 返回的对象的、名为 self 的指针的。这样之后 self 已经可以执行所有方法了。<br>为了完成两步创建，第一个发送给新创建的实例的方法是约定俗成的 init 方法。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">id</span><br><span class="line">_objc_rootInit(id obj)</span><br><span class="line">&#123;</span><br><span class="line">    // In practice, it will be hard to rely on this function.</span><br><span class="line">    // Many classes do not properly chain -init calls.</span><br><span class="line">    return obj;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从此可知 init 方法只是调用了 _objc_rootInit 并返回了当前对象<br>alloc 方法会返回一个合法的没有初始化的实例对象。每一个发送到实例的消息会被翻译为objc_msgSend() 函数的调用，它的参数是指向 alloc 返回的对象的、名为 self 的指针的。这样之后 self 已经可以执行所有方法了。<br>为了完成两步创建，第一个发送给新创建的实例的方法是约定俗成的 init 方法。 </p>
 <br>
 
 
@@ -533,7 +528,7 @@ _objc_rootInit(id obj)
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">34</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
