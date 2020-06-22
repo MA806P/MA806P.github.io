@@ -88,7 +88,7 @@
 <meta property="og:description" content="本文对 KVC、KVO 相关知识进行全面的整理总结，介绍了相关的基本概念、使用方法、注意事项、实现原理等。后续如有更深的理解会继续整理总结。 简介KVC ( Key-value coding 键值编码 ) 是一种由 NSKeyValueCoding 非正式协议启用的机制，对象采用该机制提供对其属性的间接访问。当对象符合键值编码时，通过字符串名称访问对象属性。键值编码的机制也是其他 Cocoa 框架">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2020&#x2F;kvc-1.jpg">
-<meta property="og:updated_time" content="2020-06-17T09:09:45.002Z">
+<meta property="og:updated_time" content="2020-06-17T09:12:47.614Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2020&#x2F;kvc-1.jpg">
 
@@ -327,9 +327,8 @@
 </ul>
 <p>例如某对象有属性 name、age，我们就可使用上面两个方法进行访问、设置属性值。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@property (nonatomic, copy) NSString *name;</span><br><span class="line">@property (nonatomic, assign) int age;</span><br><span class="line"></span><br><span class="line">[obj setValue:@&quot;jone&quot; forKey:@&quot;name&quot;];</span><br><span class="line">[obj setValue:@(10) forKey:@&quot;age&quot;];</span><br><span class="line">id stAge = [obj valueForKey:@&quot;age&quot;];</span><br></pre></td></tr></table></figure>
-<p>对于属性是基本的数据类型时 (int, CGFloat)  是放入 NSNumber 或 NSValue 中来设置的。  </p>
-<p>相比直接访问，KVC的效率会稍低一点，所以只有当你非常需要它提供的可扩展性时才使用它。</p>
-<h4 id="其他使用方法"><a href="#其他使用方法" class="headerlink" title="其他使用方法"></a>其他使用方法</h4><p>1、属性的属性的访问<br>KVC 还提供了访问属性的属性的操作方法：</p>
+<p>对于属性是基本的数据类型时 (int, CGFloat)  是放入 NSNumber 或 NSValue 中来设置的。<br>相比直接访问，KVC的效率会稍低一点，所以只有当你非常需要它提供的可扩展性时才使用它。  </p>
+<h4 id="其他使用方法"><a href="#其他使用方法" class="headerlink" title="其他使用方法"></a>其他使用方法</h4><p>1、属性的属性的访问<br>KVC 还提供了访问属性的属性的操作方法：  </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">- (nullable id)valueForKeyPath:(NSString *)keyPath;</span><br><span class="line">- (void)setValue:(nullable id)value forKeyPath:(NSString *)keyPath;</span><br></pre></td></tr></table></figure>
 
 <p>例如下面两个类：  </p>
@@ -338,7 +337,7 @@
 <p>2、多值访问<br>同时访问多个属性的方法：  </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[obj setValuesForKeysWithDictionary:@&#123;@&quot;name&quot;:@&quot;Tom&quot;, @&quot;age&quot;:@(2)&#125;];</span><br><span class="line">NSDictionary *values = [obj dictionaryWithValuesForKeys:@[@&quot;name&quot;,@&quot;age&quot;]];</span><br></pre></td></tr></table></figure>
 
-<p>3、集合属性<br>KVC 同样适用于集合对象，可以通过 valueForKey: 和 setValue:forKey:（或它们的键路径方式）获取或设置集合对象。</p>
+<p>3、集合属性<br>KVC 同样适用于集合对象，可以通过 valueForKey: 和 setValue:forKey:（或它们的键路径方式）获取或设置集合对象。  </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//@property (nonatomic, copy) NSArray&lt;Student *&gt; *students;</span><br><span class="line">id array = [teacher valueForKeyPath:@&quot;students.name&quot;];</span><br><span class="line">//返回数组，包含属性 student.name</span><br></pre></td></tr></table></figure>
 
 <p>KVC 还提供了接口  mutableArrayValueForKey:、  mutableSetValueForKey: 来操作集合类型的属性。  </p>
@@ -348,7 +347,7 @@
 <ul>
 <li>简单集合运算符有 @avg，@count，@max，@min，@sum  </li>
 <li>对象运算符，比集合运算符稍微复杂，能以数组的方式返回指定的内容，有两种 @distinctUnionOfObjects、@unionOfObjects ，前者会去除重复的以后返回，后者直接返回。  </li>
-<li>Array和Set操作符，这种情况更复杂了，说的是集合中包含集合的情况，有三种 @distinctUnionOfArrays、@unionOfArrays、@distinctUnionOfSets，前两个针对的集合是Arrays，后一个针对的集合是Sets。因为Sets中的元素本身就是唯一的，所以没有对应的 @unionOfSets 运算符。</li>
+<li>Array和Set操作符，这种情况更复杂了，说的是集合中包含集合的情况，有三种 @distinctUnionOfArrays、@unionOfArrays、@distinctUnionOfSets，前两个针对的集合是Arrays，后一个针对的集合是Sets。因为Sets中的元素本身就是唯一的，所以没有对应的 @unionOfSets 运算符。  </li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">NSNumber *value = [teacher valueForKeyPath:@&quot;students.@max.age&quot;];</span><br><span class="line">NSNumber *count = [teacher valueForKeyPath:@&quot;students.@count&quot;];</span><br><span class="line"></span><br><span class="line"> NSArray * array = [teacher valueForKeyPath:@&quot;students.@distinctUnionOfObjects.age&quot;];</span><br><span class="line"> </span><br><span class="line"> NSMutableArray *someStudents = [NSMutableArray array];</span><br><span class="line">[someStudents addObject:@[st0, st1, st2]];</span><br><span class="line">[someStudents addObject:@[st3, st4]];</span><br><span class="line">id value = [someStudents valueForKeyPath:@&quot;@distinctUnionOfArrays.age&quot;];</span><br></pre></td></tr></table></figure>
 
@@ -382,7 +381,7 @@
 <p>移除观察，和移除通知比较类似，需要在不用继续观察的时候移除它，比如在控制器的 dealloc 方法里面释放，注意重复移除会 crash。  </p>
 <p>4、调试 KVO<br>可以打断点，在 lldb 中查看被观察对象的所有观察信息。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lldb po [obj observationInfo]</span><br></pre></td></tr></table></figure>
-<p>这会打印出有关谁观察谁之类的很多信息。</p>
+<p>这会打印出有关谁观察谁之类的很多信息。  </p>
 <h4 id="KVO-兼容"><a href="#KVO-兼容" class="headerlink" title="KVO 兼容"></a>KVO 兼容</h4><p>有两种方法可以保证变更通知被发出。自动发送通知是 NSObject 提供的，并且一个类中的所有属性都默认支持，只要是符合 KVC 的。<br>手动变更通知需要些额外的代码，但也对通知发送提供了额外的控制。可以通过重写子类 automaticallyNotifiesObserversForKey: 方法的方式控制子类一些属性的自动通知。  </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">+ (BOOL)automaticallyNotifiesObserversForKey:(NSString *)key &#123;</span><br><span class="line">    if ([key isEqualToString:@&quot;name&quot;]) &#123;</span><br><span class="line">        return NO;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        return [super automaticallyNotifiesObserversForKey:key];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)setName:(NSString *)name &#123;</span><br><span class="line">    if (![_name isEqualToString:name]) &#123;</span><br><span class="line">        [self willChangeValueForKey:@&quot;name&quot;];</span><br><span class="line">        _name = [name copy];</span><br><span class="line">        [self didChangeValueForKey:@&quot;name&quot;];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//如果一个操作导致多个键变化，需要嵌套变更通知</span><br><span class="line">- (void)setLastName:(NSString *)lastName &#123;</span><br><span class="line">    [self willChangeValueForKey:@&quot;lastName&quot;];</span><br><span class="line">    [self willChangeValueForKey:@&quot;fullName&quot;];</span><br><span class="line">    _lastName = [lastName copy];</span><br><span class="line">    _fullName = [NSString stringWithFormat:@&quot;Title %@&quot;, lastName];</span><br><span class="line">    [self didChangeValueForKey:@&quot;fullName&quot;];</span><br><span class="line">    [self didChangeValueForKey:@&quot;lastName&quot;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -395,7 +394,7 @@
 
 <h4 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h4><p>KVO 是基于 runtime 运行时来实现的，当你观察了某个对象的属性，内部会生成一个该对象所属类的子类，中间类，然后重写被观察属性的 setter 方法，当然在重写的方法中会调用父类的 setter 方法从而不会影响框架使用者的逻辑，之后会将该对象的 isa 指针指向新创建的这个类，最后会重写 -(Class)class; 方法，让使用者通过 [obj class] 查看当前对象所属类的时候会返回其父类，使其看似没有改变什么，让你觉得不需要添加额外的代码，就能使用 KVO。<br>Apple 并不希望过多暴露 KVO 的实现细节。想要深究实现细节，<a href="https://www.mikeash.com/pyblog/friday-qa-2009-01-23.html" target="_blank" rel="noopener">可查看文章</a><br>下面例子，通过 object_getClass() 方法查看观察前后的变化。  </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">//object_getClass 获取 isa 指针指向的对象</span><br><span class="line">//object_setClass 更改对象的 isa 指针指向。将对象设置为别的类类型，返回原来的Class</span><br><span class="line">NSLog(@&quot;1 --- %p %@ %p&quot;, obj, object_getClass(obj), [obj methodForSelector:@selector(setName:)]);</span><br><span class="line"></span><br><span class="line">[obj addObserver:self forKeyPath:@&quot;name&quot; options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:(__bridge void *)self];</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;2 --- %p %@ %p&quot;, obj, object_getClass(obj), [obj methodForSelector:@selector(setName:)]);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[self.obj removeObserver:self forKeyPath:@&quot;name&quot;];</span><br><span class="line">NSLog(@&quot;3 --- %p %@ %p&quot;, self.obj, object_getClass(self.obj), [self.obj methodForSelector:@selector(setName:)]);</span><br><span class="line"></span><br><span class="line">//1 --- 0x60000225cea0  AStudent 0x1067f72a0</span><br><span class="line">//2 --- 0x60000225cea0  NSKVONotifying_AStudent 0x7fff258e454b</span><br><span class="line">//3 --- 0x60000225cea0  AStudent 0x1067f72a0</span><br></pre></td></tr></table></figure>
-<p>通过上面的打印结果可知，添加观察后，原本的类变成了 NSKVONotifying_AStudent，移除观察后又变回去了， setName: 方法也发生了变化。 </p>
+<p>通过上面的打印结果可知，添加观察后，原本的类变成了 NSKVONotifying_AStudent，移除观察后又变回去了， setName: 方法也发生了变化。   </p>
 <br>
 
 
