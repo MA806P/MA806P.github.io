@@ -94,7 +94,7 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2020&#x2F;render-04.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2020&#x2F;render-05.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2020&#x2F;render-06.png">
-<meta property="og:updated_time" content="2020-07-14T09:53:07.124Z">
+<meta property="og:updated_time" content="2020-07-14T09:55:52.088Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2020&#x2F;render-01.png">
 
@@ -407,7 +407,7 @@
 <li><p>图形的生成<br>CALayer 的 border、圆角、阴影、遮罩（mask），CASharpLayer 的矢量图形显示，通常会触发离屏渲染（offscreen rendering），而离屏渲染通常发生在 GPU 中。当一个列表视图中出现大量圆角的 CALayer，并且快速滑动时，可以观察到 GPU 资源已经占满，而 CPU 资源消耗很少。这时界面仍然能正常滑动，但平均帧数会降到很低。为了避免这种情况，可以尝试开启 CALayer.shouldRasterize 光栅化属性，但这会把原本离屏渲染的操作转嫁到 CPU 上去。<br>对于只需要圆角的情况，也可以用一张已经绘制好的圆角图片覆盖到原本视图上面来模拟相同的视觉效果。最彻底的解决办法，就是把需要显示的图形在后台线程绘制为图片，避免使用圆角、阴影、遮罩等属性。</p>
 </li>
 </ul>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p><a href="https://www.jianshu.com/p/748f9abafff8" target="_blank" rel="noopener">iOS开发-视图渲染与性能优化</a><br><a href="https://juejin.im/post/5ec35cc55188256d92438174" target="_blank" rel="noopener">iOS Rendering 渲染全解析</a><br><a href="http://chuquan.me/2018/09/25/ios-graphics-render-principle/" target="_blank" rel="noopener">iOS 图像渲染原理</a><br><a href="https://blog.ibireme.com/2015/11/12/smooth_user_interfaces_for_ios/" target="_blank" rel="noopener">iOS 保持界面流畅的技巧</a><br><a href="">iOS 浅谈GPU及“App渲染流程”</a><a href="https://juejin.im/post/5e80b49751882573be11b138" target="_blank" rel="noopener">https://juejin.im/post/5e80b49751882573be11b138</a></p>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p><a href="https://www.jianshu.com/p/748f9abafff8" target="_blank" rel="noopener">iOS开发-视图渲染与性能优化</a><br><a href="https://juejin.im/post/5ec35cc55188256d92438174" target="_blank" rel="noopener">iOS Rendering 渲染全解析</a><br><a href="http://chuquan.me/2018/09/25/ios-graphics-render-principle/" target="_blank" rel="noopener">iOS 图像渲染原理</a><br><a href="https://blog.ibireme.com/2015/11/12/smooth_user_interfaces_for_ios/" target="_blank" rel="noopener">iOS 保持界面流畅的技巧</a><br><a href="https://juejin.im/post/5e80b49751882573be11b138" target="_blank" rel="noopener">iOS 浅谈GPU及App渲染流程</a></p>
 
       
     </div>
