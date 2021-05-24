@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="简介前面的文章了解了OC对象(Objective-C对象解析)，本文将简单介绍Objective-C消息传递的消息传递机制。Objective-C 是 C的超集，C语言的函数调用方式，使用“静态绑定”（static binding），在编译期就能决定运行时所应调用的函数。而“动态绑定”（dynamic binding）,所要调用的函数直到运行期才能确定，带调用的函数地址无法硬编码在指令之中，而是要">
+<meta name="keywords" content="MA806P blog iOS 技术博客 个人博客">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Objective-C消息传递详解">
+<meta property="og:url" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;2017&#x2F;08&#x2F;27&#x2F;sendmsg&#x2F;index.html">
+<meta property="og:site_name" content="Peng&#39;s blog">
+<meta property="og:description" content="简介前面的文章了解了OC对象(Objective-C对象解析)，本文将简单介绍Objective-C消息传递的消息传递机制。Objective-C 是 C的超集，C语言的函数调用方式，使用“静态绑定”（static binding），在编译期就能决定运行时所应调用的函数。而“动态绑定”（dynamic binding）,所要调用的函数直到运行期才能确定，带调用的函数地址无法硬编码在指令之中，而是要">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2017&#x2F;passmsg-1.jpg">
+<meta property="og:updated_time" content="2019-12-12T02:51:43.324Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2017&#x2F;passmsg-1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: false,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yupeng.fun/2017/08/27/sendmsg/"/>
+
+
+
+
+
+  <title>Objective-C消息传递详解 | Peng's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Peng's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yupeng.fun/2017/08/27/sendmsg/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="MA806P">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avator-default.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Peng's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Objective-C消息传递详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-27T16:10:25+08:00">
+                2017-08-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>前面的文章了解了OC对象(<a href="http://www.yupeng.fun/2017/07/21/object/" target="_blank" rel="noopener">Objective-C对象解析</a>)，本文将简单介绍Objective-C消息传递的消息传递机制。<br>Objective-C 是 C的超集，C语言的函数调用方式，使用“静态绑定”（static binding），在编译期就能决定运行时所应调用的函数。而“动态绑定”（dynamic binding）,所要调用的函数直到运行期才能确定，带调用的函数地址无法硬编码在指令之中，而是要在运行期读取出来。<br>Objective-C中如果向某对象传递消息，就会使用动态绑定机制来决定需要调用的方法。在底层，所有方法都是普通的C语言函数，然而对象收到消息之后，究竟该调用哪个方法则完全于运行期决定，甚至可以在程序运行时改变，这些特性使OC为一门真正的动态语言。</p>
+<p>Objective-C 是一个动态语言，这意味着它不仅需要一个编译器，也需要一个运行时系统来动态得创建类和对象、进行消息传递和转发。</p>
+<h4 id="理解objc-mesgSend的作用"><a href="#理解objc-mesgSend的作用" class="headerlink" title="理解objc_mesgSend的作用"></a>理解objc_mesgSend的作用</h4><p>类型为id类型的对象，编译器假定它能相应所有消息。编译器无法确定某类型对象能解读多少种选择器，因为运行期还可向其中动态新增。如果声明指定了具体类型，那么在该类实例上调用其所没有的方法时，编译器会探知此情况，并发出警告信息。<br>在运行期检视对象类型这一操作也称为 类型信息查询（introspection, 内省）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id returnValue = [someObject messageName:parameter];</span><br></pre></td></tr></table></figure>
+<p>someObject: “接收者”receiver<br>messageName: “选择器”selector，选择器与参数合起来称作“消息”message<br>编译器看到此消息后，将其转换为一条标准的C语言函数调用，所调用的函数是消息传递机制中的核心函数， void objc_msgSend(id self, SEL cmd, …) 这是个参数可变的函数 （variadic function），能接收两个或两个以上的参数。第一个参数代表接收者，第二个参数代表选择器（SEL 是选择器的类型）选择器指的就是方法的名字，后续参数就是消息中的那些参数，其顺序不变。编译器会把上面的例子中的消息转换为如下函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id returnValue = objc_msgSend(someObject, @selector(messageName:),parameter);</span><br></pre></td></tr></table></figure>
+
+<p>objc_msgSend函数会根据接收者与选择器的类型来调用适当的方法。为了完成此操作，该方法需要在接收者所属的类中搜寻其方法列表，如果能找到与选择器名称相符的方法，就跳至其实现代码。若是找不到，就沿着继承体系继续向上查找，等找到合适的方法之后再跳转。如果最终还是找不到相符的方法，就执行消息转发机制。</p>
+<p>这样来看调用一个方法似乎需要很多步骤。所幸objc_msgSend会将匹配结果缓存在“快速映射表”里面，每个类都有这样一块缓存，若是后面还向该类发送与选择器相同的消息，那么执行起来就很快。当然这种“快速执行路径”还是不如“静态绑定的函数调用操作”那样迅速，不过只要把选择器缓存起来，也不会慢很多。实际上消息派发并非应用程序的瓶颈所在，假如真是个瓶颈的话，可以只编写纯C函数，在调用时根据需要，把OC对象的状态传进去。</p>
+<p>之前只是描述了部分消息的调用过程，其他特殊情况则需要交由OC运行环境中的另一些函数来处理：</p>
+<blockquote>
+<p>objc_msgSend_stret: 待发送的消息要返回结构体，那么可交由此函数处理。只有当CPU的寄存器能够容纳得下消息返回类型时，这个函数才能处理此消息。若是返回的结构体过大，那么就由另一个函数执行派发，会通过分配在栈上的某个变量来处理消息所返回的结构体。</p>
+</blockquote>
+<blockquote>
+<p>objc_msgSend_fpret: 消息返回的是浮点数，那么可交由此函数处理。这个函数是为了处理x86 等架构CPU中某些奇怪的状况。</p>
+</blockquote>
+<blockquote>
+<p>objc_msgSengSuper: 如果要给超类发消息，那么就交给此函数处理。也有另外两个与objc_msgSend_stret objc_msgSend_fpret等效的函数，用于处理发给super的相应消息。</p>
+</blockquote>
+<p>objc_msgSend等函数一旦找到应该调用的方法实现之后，就会跳转过去，之所以能这样做，是因为OC对象的每个方法都可以视为简单的C函数，其原型类似于：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;return_type&gt; Class_selector(id self, SEL _cmd, …)</span><br></pre></td></tr></table></figure>
+
+<p>每个类里都有一张表格，其中的指针都会指向这种函数，而选择器的名称则是查表时所用的“键”。objc_msgSend等函数正是通过这张表格来寻找应该执行的方法并跳至其实现的。<br>注意，原型的样子和objc_msgSend等函数很像，这是为了利用“尾调用优化”（tail-call optimization)技术，令“跳转方法实现”这一操作变得更简单些。<br>如果某函数的最后一项操作是调用另外一个函数，那么就可以运用尾调用优化技术。编译器会生成调转至另一函数所需的指令码，而且不会向调用堆栈中推入新的栈帧。只有当某些函数的最后一个操作仅仅是调用其他函数而不会将其返回值另做他用时，才能执行尾调用优化。这项优化对objc_msgSend非常关键，如果不这么做，那么每次调用OC方法之前都需要为调用objc_msgSend函数准备“栈帧”，在栈踪迹（stack trace）中可以看到这种栈帧。此外，若是不优化，还会过早地发生“栈溢出”（stack overflow）现象。</p>
+<h6 id="小结："><a href="#小结：" class="headerlink" title="小结："></a>小结：</h6><p>1.消息有接收者、选择器及参数，构成。给某对象发消息，相当于在该对象上调用方法<br>2.发给某对象的全部消息都要由动态消息派发系统(dynamic message dispatch system)来处理，该系统会查出对应的方法，并执行其代码。</p>
+<br>
+<br>
+
+<h4 id="理解消息转发机制"><a href="#理解消息转发机制" class="headerlink" title="理解消息转发机制"></a>理解消息转发机制</h4><p>对象在收到无法解读的消息之后会发生什么情况 ？<br>在编译期向类发送了其无法解读的消息并不会报错，因为在运行期可以继续向类中添加方法，所以编译器在编译时还无法确知类中到底会不会有某个方法实现。当对象收到无法解读的消息后，就会启用“消息转发”(message forwarding)机制，程序员可以经此过程告诉对象应该如何处理未知消息。</p>
+<p>消息转发分为两大阶段：</p>
+<ul>
+<li><p>第一阶段先征询接收者，所属的类，看其是否能动态添加方法，以处理当前这个“未知的选择器”，这叫做“动态方法解析”(dynamic method resolution).</p>
+</li>
+<li><p>第二阶段涉及完整的消息转发机制，如运行期系统已经把第一阶段执行完了，那么接收者自己就无法再以动态新增方法的手段来响应包含该选择器的消息了。<br>运行期系统会请求接收者以其他手段来处理与消息相关的方法调用，可细分为两步：<br>首先，请接收者看看有没有其他对象能处理这条消息，若有，则运行期系统会把消息转给那个对象，于是消息转发结束。<br>若没有“备援的接收者”(replacement receiver)，则启动完整的消息转发机制，运行期系统会把与消息有关的全部细节都封装到NSInvocation对象中，再给接收者最后一次机会，令其设法解决当前还未处理的这条消息。</p>
+<br>
+
+</li>
+</ul>
+<h6 id="动态方法解析"><a href="#动态方法解析" class="headerlink" title="动态方法解析"></a>动态方法解析</h6><p>对象在收到无法解读的消息后，首先将调用其所属类的下列方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ (BOOL)resolveInstanceMethod:(SEL)selector;</span><br></pre></td></tr></table></figure>
+<p>该方法的参数就是那个未知的选择器，其返回值表示这个类是否能新增一个实例方法用以处理此选择器。再继续往下执行转发机制之前，本类有机会新增一个处理此选择器的方法。假如尚未实现的方法不是实例方法，而是类方法，那么运行期系统会调用另外一个方法，“resolveClassMethod:”。<br>使用这种办法的前提是：相关方法的实现代码已经写好，只等着运行时候动态插在类里面就可以了。此方案常用来实现@dynamic属性。</p>
+<h6 id="备援接收者"><a href="#备援接收者" class="headerlink" title="备援接收者"></a>备援接收者</h6><p>当前接收者还有第二次机会能处理未知的选择子。这一步，运行期系统会问当前接收者：能不能把这条消息转给其他接收者来处理。与该步骤对应的处理方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (id)forwardingTargetForSelector:(SEL)selector</span><br></pre></td></tr></table></figure>
+<p>若当前接收者能找到备援对象，则将其返回，若找不到返回nil。通过此方案，可以用“组合”来模拟出多重继承的某些特性。在一个对象内部，可能还有一些列其他对象，该对象可经由此方法将能够处理某选择器的相关内部对象返回，这样的话，在外界看来，好像是该对象亲自处理了这些消息。<br>注意，我们无法操作经由这一步所转发的消息。若是想在发送给备援接收者之前先修改消息内容，那就得通过完整的消息转发机制来做了。</p>
+<h6 id="完整的消息转发"><a href="#完整的消息转发" class="headerlink" title="完整的消息转发"></a>完整的消息转发</h6><p>到了这一步，唯一能做的就是启用完整的消息转发机制。首先创建NSInvocation对象，把与尚未处理的那条消息有关的全部细节都封装于其中。此对象包含选择器、目标及参数。在触发NSInvocation对象时，消息派发系统将出马，把消息指派给目标对象，此步骤会调用下列方法来转发消息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (void)forwardInvocation:(NSInvocation *)invocation</span><br></pre></td></tr></table></figure>
+<p>这个方法可以实现的很简单：只需改变调用目标，使消息在新目标上得以调用即可。然而这样实现出来的方法与备援接收者方案所实现的方法等效，所以很少有人采用这么简单的实现方式。比较有用的实现方式为：在触发消息前，先以某种方式改变消息内容，如增加另外一个参数，或是改换选择器等。<br>实现此方法时，若发现某调用操作不应该由本类处理，则需要调用超类的同名方法。这样继承体系中的每个类都有机会处理此调用请求，直至NSObject。如最后调用了NSObject类的方法，那么该方法还会继而调用“doesNotRecognizeSelector:”以抛出异常，此异常表明选择器最终未能得到处理。</p>
+<p><img src="/images/2017/passmsg-1.jpg" alt="消息转发全流程"></p>
+<p>接收者在每一步中均有机会处理消息，步骤越往后，处理消息的代价越大。最好能在第一步就处理完，这样运行期系统就可以将此方法缓存起来。若这个类的实例后面还收到同名选择器，那么就根本无须启动消息转发流程。</p>
+<h6 id="小结：-1"><a href="#小结：-1" class="headerlink" title="小结："></a>小结：</h6><p>1.若对象无法响应某个选择器，则进入消息转发流程<br>2.通过运行期的动态方法解析功能，可以在需要用到某个方法时在将其加入类中<br>3.对象可以把其无法解读的某些选择器转交给其他对象来处理<br>4.经过上两步骤，若还是没办法处理选择器，那就启动完整的消息转发机制。</p>
+<br>
+<br>
+
+<h4 id="用“方法调配技术”调试“黑盒方法”"><a href="#用“方法调配技术”调试“黑盒方法”" class="headerlink" title="用“方法调配技术”调试“黑盒方法”"></a>用“方法调配技术”调试“黑盒方法”</h4><p>OC对象收到消息后，要在运行期才能解析出来究竟会调用何种方法。给定的选择器名称相对应的方法也可以在运行期改变。这样我们不需要源代码，也不需要通过继承子类来覆写方法就能改变这个类本身的功能。这样新功能将在本类的所有实例中生效，而不是仅限于覆写了相关方法的那些子类实例。此方案经常称为“方法调配”。</p>
+<p>类的方法列表会把选择器的名称映射到相关的方法实现上，使得“动态消息派发系统”能够据此找到应该调用的方法。这些方法均以函数指针的形式来表示，这种指针叫做IMP：id (*IMP)(id, SEL, …)<br>NSString可以相应 lowercaseString..等，映射表的每个选择器都映射到不同IMP上： lowercaseString —&gt;  IMP ..<br>OC的运行期系统提供的几个方法都能用来操作这张表。开发者可以向其中新增选择器，也可以改变某选择器所对应的方法实现，还可以交换两个选择器所映射到的指针。</p>
+<p>互换两个方法实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#import &lt;objc/runtime.h&gt;</span><br><span class="line"></span><br><span class="line">Method originalMethod = class_getInstanceMethod([NSString class], @selector(lowercaseString));</span><br><span class="line">Method swappedMethod = class_getInstanceMethod([NSString class], @selector(uppercaseString));</span><br><span class="line">method_exchangeImplementations(originalMethod, swappedMethod);</span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">NSString * string = @&quot;Hello! Nice to meet you.&quot;;</span><br><span class="line"></span><br><span class="line">NSString * lowercaseString = [string lowercaseString];</span><br><span class="line">//HELLO! NICE TO MEET YOU.</span><br><span class="line"></span><br><span class="line">NSString * uppercaseString = [string uppercaseString];</span><br><span class="line">//hello! nice to meet you.</span><br></pre></td></tr></table></figure>
+<p>可以通过这一手段来为既有的方法实现增添新功能，如想要在lowercaseString调用时记录某些信息，这时可以通过交换方法来达到此目标。<br>可为那些完全不知具体实现的黑盒方法增加日志功能，有助于程序调试。此做法只在调试程序时有用，很少会在调试程序之外来永久改动某个类的功能。若是滥用会让代码不易读难以维护。</p>
+<br>
+<br>
+
+<h5 id="References"><a href="#References" class="headerlink" title="References"></a>References</h5><p><a href="http://draveness.me/method-struct.html" target="_blank" rel="noopener">http://draveness.me/method-struct.html</a><br><a href="http://tech.glowing.com/cn/objective-c-runtime/" target="_blank" rel="noopener">http://tech.glowing.com/cn/objective-c-runtime/</a><br><a href="http://www.jianshu.com/p/6b905584f536" target="_blank" rel="noopener">http://www.jianshu.com/p/6b905584f536</a><br><a href="https://book.douban.com/subject/25829244/" target="_blank" rel="noopener">《Effective Objective-C 2.0》</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    MA806P
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yupeng.fun/2017/08/27/sendmsg/" title="Objective-C消息传递详解">http://yupeng.fun/2017/08/27/sendmsg/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/21/object/" rel="next" title="Objective-C对象解析">
+                <i class="fa fa-chevron-left"></i> Objective-C对象解析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/11/extension/" rel="prev" title="Application-Extension（一）：介绍">
+                Application-Extension（一）：介绍 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avator-default.png"
+                alt="MA806P" />
+            
+              <p class="site-author-name" itemprop="name">MA806P</p>
+              <p class="site-description motion-element" itemprop="description">在希望的田野上 折腾着</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/MA806P" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:mayp126@126.com" target="_blank" title="邮箱">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>邮箱</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#理解objc-mesgSend的作用"><span class="nav-number">1.1.</span> <span class="nav-text">理解objc_mesgSend的作用</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#小结："><span class="nav-number">1.1.0.1.</span> <span class="nav-text">小结：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#理解消息转发机制"><span class="nav-number">1.2.</span> <span class="nav-text">理解消息转发机制</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#动态方法解析"><span class="nav-number">1.2.0.1.</span> <span class="nav-text">动态方法解析</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#备援接收者"><span class="nav-number">1.2.0.2.</span> <span class="nav-text">备援接收者</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#完整的消息转发"><span class="nav-number">1.2.0.3.</span> <span class="nav-text">完整的消息转发</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#小结：-1"><span class="nav-number">1.2.0.4.</span> <span class="nav-text">小结：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#用“方法调配技术”调试“黑盒方法”"><span class="nav-number">1.3.</span> <span class="nav-text">用“方法调配技术”调试“黑盒方法”</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#References"><span class="nav-number">1.3.1.</span> <span class="nav-text">References</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">MA806P</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
