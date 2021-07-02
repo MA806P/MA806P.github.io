@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="服务器 nginx," />
+  <meta name="keywords" content="网络,服务器,nginx," />
 
 
 
@@ -80,7 +80,7 @@
 
 
 <meta name="description" content="简介Nginx （engine X）是俄罗斯人编写的一款轻量级的 Web 服务器、反向代理服务器，同时也是一个 IMAP&#x2F;POP3&#x2F;SMTP 代理服务器。Nginx 因为它的稳定性、丰富的模块库、灵活的配置和低系统资源的消耗而闻名。   反向代理由于防火墙的原因，我们并不能直接访问谷歌，那么我们可以借助VPN来实现，这就是一个简单的正向代理的例子。正向代理“代理”的是客户端，而且客户端是知道目标的">
-<meta name="keywords" content="服务器 nginx">
+<meta name="keywords" content="网络,服务器,nginx">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CentOS 7 安装 Nginx">
 <meta property="og:url" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;2019&#x2F;08&#x2F;21&#x2F;nginx&#x2F;index.html">
@@ -90,7 +90,7 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2019&#x2F;nginx-1.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2019&#x2F;nginx-2.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2019&#x2F;nginx-3.png">
-<meta property="og:updated_time" content="2021-05-24T11:25:49.568Z">
+<meta property="og:updated_time" content="2021-07-02T07:07:59.791Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2019&#x2F;nginx-1.png">
 
@@ -318,7 +318,7 @@
 
       
         <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>Nginx （engine X）是俄罗斯人编写的一款轻量级的 Web 服务器、反向代理服务器，同时也是一个 IMAP/POP3/SMTP 代理服务器。<br>Nginx 因为它的稳定性、丰富的模块库、灵活的配置和低系统资源的消耗而闻名。  </p>
-<h6 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h6><p>由于防火墙的原因，我们并不能直接访问谷歌，那么我们可以借助VPN来实现，这就是一个简单的正向代理的例子。正向代理“代理”的是客户端，而且客户端是知道目标的，而目标是不知道客户端是通过VPN访问的。</p>
+<h4 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h4><p>由于防火墙的原因，我们并不能直接访问谷歌，那么我们可以借助VPN来实现，这就是一个简单的正向代理的例子。正向代理“代理”的是客户端，而且客户端是知道目标的，而目标是不知道客户端是通过VPN访问的。</p>
 <p>当我们在外网访问百度的时候，其实会进行一个转发，代理到内网去，这就是所谓的反向代理，即反向代理“代理”的是服务器端，而且这一个过程对于客户端而言是透明的。</p>
 <h3 id="安装-Nginx"><a href="#安装-Nginx" class="headerlink" title="安装 Nginx"></a>安装 Nginx</h3><p>本文系统使用的是阿里云服务器 CentOS 7.4 64位。</p>
 <p>1、安装 nginx</p>
@@ -391,7 +391,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8-nginx/" rel="tag"> <i class="fa fa-tag"></i> 服务器 nginx</a>
+            <a href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag"> <i class="fa fa-tag"></i> 网络</a>
+          
+            <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="tag"> <i class="fa fa-tag"></i> 服务器</a>
+          
+            <a href="/tags/nginx/" rel="tag"> <i class="fa fa-tag"></i> nginx</a>
           
         </div>
       
@@ -497,7 +501,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-count">42</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -509,10 +513,10 @@
               
               
               <div class="site-state-item site-state-tags">
-                
-                  <span class="site-state-item-count">6</span>
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">标签</span>
-                
+                </a>
               </div>
             
 
@@ -565,7 +569,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#反向代理"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">反向代理</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装-Nginx"><span class="nav-number">2.</span> <span class="nav-text">安装 Nginx</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nginx-配置"><span class="nav-number">3.</span> <span class="nav-text">nginx 配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nginx-相关命令"><span class="nav-number">4.</span> <span class="nav-text">nginx 相关命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#遇到的问题"><span class="nav-number">5.</span> <span class="nav-text">遇到的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reference"><span class="nav-number">6.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#反向代理"><span class="nav-number">1.1.</span> <span class="nav-text">反向代理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装-Nginx"><span class="nav-number">2.</span> <span class="nav-text">安装 Nginx</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nginx-配置"><span class="nav-number">3.</span> <span class="nav-text">nginx 配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nginx-相关命令"><span class="nav-number">4.</span> <span class="nav-text">nginx 相关命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#遇到的问题"><span class="nav-number">5.</span> <span class="nav-text">遇到的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reference"><span class="nav-number">6.</span> <span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>

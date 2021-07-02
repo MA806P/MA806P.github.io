@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="网络," />
 
 
 
@@ -80,7 +80,7 @@
 
 
 <meta name="description" content="前言本篇文章将全面介绍计算机网络技术基础知识，对计算机网络运作流程进行简单介绍。阅读本篇文章你将会对计算机网络的发展、组成、性能指、计算机网络体系结构，等，这些计算机网络基础知识，有大概的了解。 概述 从上世纪90年代以后，以因特网为代表的计算机网络得到了飞速的发展，网络改变了我的工作生活的各个方面，加速了全球信息革命的进程。  1994年4月20日我国用64kb&#x2F;s专线正式连入互联网，从此我国被">
-<meta name="keywords" content="MA806P blog iOS 技术博客 个人博客">
+<meta name="keywords" content="网络">
 <meta property="og:type" content="article">
 <meta property="og:title" content="网络技术基础">
 <meta property="og:url" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;2017&#x2F;01&#x2F;21&#x2F;network&#x2F;index.html">
@@ -97,7 +97,7 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2017&#x2F;network-8.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2017&#x2F;network-9.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2017&#x2F;network-91.png">
-<meta property="og:updated_time" content="2019-11-29T07:53:28.472Z">
+<meta property="og:updated_time" content="2021-07-02T07:08:28.252Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yupeng.fun&#x2F;images&#x2F;2017&#x2F;network-1.png">
 
@@ -341,7 +341,7 @@
 <li>1969年美国国防部创建的第一个分组交换网ARPANET最初只是一个单个的分组交换网，所有要连接在ARPANET上的主机都直接与就近的结点交换机相连，这显然是不能满足通信需求的，于是就开始研究多种网络互连的技术，这就导致后来的互联网的出现，一步步发展成现在的因特网。</li>
 <li>1983年，TCP/IP协议成为ARPANET上的标准协议，这个使得所有使用TCP/IP协议的计算机都能利用互联网互相通信，因而人们就把1983年作为因特网的诞生时间。</li>
 <li>1985年起，美国国家科学基金会NSF(National Science Foundation)围绕大型计算机中心建设计算机网络，即国家科学基金网络NSFNET。这种计算机网络覆盖了全美的主要大学和研究所。</li>
-<li>1991年，NSF意识到因特网必将扩大其使用范围，不用仅仅限于大学和研究机构。世界上许多公式纷纷接入因特网，网络上的通信量急剧增大，使因特网的容量以满足不了需要，于是美国政府决定将因特网的主干网转交给私人公司来经营，并开始对接入英特网的单位收费。</li>
+<li>1991年，NSF意识到因特网必将扩大其使用范围，不用仅仅限于大学和研究机构。世界上许多公司纷纷接入因特网，网络上的通信量急剧增大，使因特网的容量以满足不了需要，于是美国政府决定将因特网的主干网转交给私人公司来经营，并开始对接入英特网的单位收费。</li>
 <li>从1993年开始，由美国政府资助的NSFNET逐渐被若干商用的因特网主干网替代，政府机构不在负责因特网的运营，这样就出现了因特网服务提供者ISP(Internet Service Provider)又被译为因特网服务提供商。</li>
 </ul>
 <p>我国最有名的ISP,中国电信、中国移动、中国联通。ISP可以从因特网管理机构申请到很多IP地址，同时拥有通信线路以及路由器等联网设备，向ISP缴纳费用，就可以从该ISP获取所需IP地址的使用权，并可通过该ISP接入到因特网。</p>
@@ -355,7 +355,7 @@
 <li>所有的因特网标准都是以RFC(Request For Comments请求评论)的形式在网上发表，所有的RFC文档都可以在网上免费下载，并非所有的RFC文档都是因特网标准，只有一小部分RFC文档才能变成因特网标准。</li>
 </ul>
 <h1 id="因特网的组成"><a href="#因特网的组成" class="headerlink" title="因特网的组成"></a>因特网的组成</h1><p>从工作方式上看，可以划分为两大块：<br><img src="/images/2017/network-1.png" alt="因特网边缘部分"></p>
-<h4 id="1-边缘部分"><a href="#1-边缘部分" class="headerlink" title="1.边缘部分"></a>1.边缘部分</h4><p>边缘部分是由所有连接在因特网上的主机组成，这部分是用户直接使用的，用来进行通信（传送数据、音频或视频）和资源共享。在网络边缘的端系统中运行的程序之间的通信方式通常可划分为两大类：</p>
+<h2 id="1-边缘部分"><a href="#1-边缘部分" class="headerlink" title="1.边缘部分"></a>1.边缘部分</h2><p>边缘部分是由所有连接在因特网上的主机组成，这部分是用户直接使用的，用来进行通信（传送数据、音频或视频）和资源共享。在网络边缘的端系统中运行的程序之间的通信方式通常可划分为两大类：</p>
 <ul>
 <li>客户服务器方式（C/S 方式）：客户(client)和服务器(server)都是指通信中所涉及的两个应用进程。客户服务器方式所描述的是进程之间服务和被服务的关系。客户是服务的请求方，服务器是服务的提供方。如下图</li>
 </ul>
@@ -365,7 +365,7 @@
 
 </li>
 </ul>
-<h4 id="2-核心部分"><a href="#2-核心部分" class="headerlink" title="2.核心部分"></a>2.核心部分</h4><ul>
+<h2 id="2-核心部分"><a href="#2-核心部分" class="headerlink" title="2.核心部分"></a>2.核心部分</h2><ul>
 <li><p>核心部分是由大量网络和连接这些网络的路由器组成，这部分是为边缘部分提供服务的（提供连通性和交换）。</p>
 </li>
 <li><p>网络核心部分是因特网中最复杂的部分。网络中的核心部分要向网络边缘中的大量主机提供连通性，使边缘部分中的任何一个主机都能够向其他主机通信（即传送或接收各种形式的数据）。</p>
@@ -379,24 +379,24 @@
 <br> 
 <br> 
 
-<h1 id="计算机网络的性能"><a href="#计算机网络的性能" class="headerlink" title="计算机网络的性能"></a>计算机网络的性能</h1><h4 id="1-速率"><a href="#1-速率" class="headerlink" title="1.速率"></a>1.速率</h4><ul>
+<h1 id="计算机网络的性能"><a href="#计算机网络的性能" class="headerlink" title="计算机网络的性能"></a>计算机网络的性能</h1><h2 id="1-速率"><a href="#1-速率" class="headerlink" title="1.速率"></a>1.速率</h2><ul>
 <li>比特（bit）是计算机中数据量的单位，也是信息论中使用的信息量的单位。Bit 来源于 binary digit，意思是一个“二进制数字”，因此一个比特就是二进制数字中的一个 1 或 0。</li>
 <li>速率即数据率(data rate)或比特率(bit rate)是计算机网络中最重要的一个性能指标。速率的单位是 b/s，或kb/s, Mb/s, Gb/s 等。速率往往是指额定速率或标称速率。  </li>
 </ul>
 <p><img src="/images/2017/network-5.png" alt=""></p>
-<h4 id="2-带宽"><a href="#2-带宽" class="headerlink" title="2.带宽"></a>2.带宽</h4><ul>
+<h2 id="2-带宽"><a href="#2-带宽" class="headerlink" title="2.带宽"></a>2.带宽</h2><ul>
 <li>带宽本来是指信号具有的频带宽度，单位是赫（或千赫、兆赫、吉赫等）。现在“带宽”是数字信道所能传送的“最高数据率”的同义语，单位是“比特每秒”，或 b/s (bit/s)。    常用的带宽单位 kb/s、Mb/s、Gb/s。现在人们常用更简单但很不严格的记法来描述网络的速率，如100M以太网。</li>
 </ul>
-<h4 id="3-吞吐量"><a href="#3-吞吐量" class="headerlink" title="3.吞吐量"></a>3.吞吐量</h4><ul>
+<h2 id="3-吞吐量"><a href="#3-吞吐量" class="headerlink" title="3.吞吐量"></a>3.吞吐量</h2><ul>
 <li>吞吐量(throughput)表示在单位时间内通过某个网络（或信道、接口）的数据量。</li>
 <li>吞吐量更经常地用于对现实世界中的网络的一种测量，以便知道实际上到底有多少数据量能够通过网络。</li>
 <li>吞吐量受网络的带宽或网络的额定速率的限制。  </li>
 </ul>
-<h4 id="4-传输时延"><a href="#4-传输时延" class="headerlink" title="4.传输时延"></a>4.传输时延</h4><ul>
+<h2 id="4-传输时延"><a href="#4-传输时延" class="headerlink" title="4.传输时延"></a>4.传输时延</h2><ul>
 <li>发送数据时，数据块从结点进入到传输媒体所需要的时间。也就是从发送数据帧的第一个比特算起，到该帧的最后一个比特发送完毕所需的时间。</li>
 <li>对于高速网络链路，我们提高的仅仅是数据的发送速率而不是比特在链路上的传播速率。 提高链路带宽减小了数据的发送时延。 </li>
 </ul>
-<h4 id="5-信道利用率"><a href="#5-信道利用率" class="headerlink" title="5.信道利用率"></a>5.信道利用率</h4><ul>
+<h2 id="5-信道利用率"><a href="#5-信道利用率" class="headerlink" title="5.信道利用率"></a>5.信道利用率</h2><ul>
 <li>信道利用率指出某信道有百分之几的时间是被利用的（有数据通过）。完全空闲的信道的利用率是零。</li>
 <li>网络利用率则是全网络的信道利用率的加权平均值。</li>
 <li>信道利用率并非越高越好。</li>
@@ -415,8 +415,8 @@
 <p><img src="/images/2017/network-7.png" alt=""></p>
 <br> 
 
-<h3 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h3><p>应用层是体系结构中的最高层，任务是通过应用进程间的交互来完成特定网络应用，应用层协议定义的是应用进程间通信和交互的规则。这里的进程就是指主机中正在运行的程序。对于不同的网络应用需要有不同的应用层协议。在因特网中的应用层协议很多，如支持万维网应用的HTTP协议，支持电子邮件的SMTP协议，支持文件传送的FTP协议，等等。</p>
-<h3 id="运输层"><a href="#运输层" class="headerlink" title="运输层"></a>运输层</h3><p>运输层的任务就是负责向两个主机进程之间的通信提供通用的数据传输服务。应用进程利用该服务传送应用层报文。</p>
+<h2 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h2><p>应用层是体系结构中的最高层，任务是通过应用进程间的交互来完成特定网络应用，应用层协议定义的是应用进程间通信和交互的规则。这里的进程就是指主机中正在运行的程序。对于不同的网络应用需要有不同的应用层协议。在因特网中的应用层协议很多，如支持万维网应用的HTTP协议，支持电子邮件的SMTP协议，支持文件传送的FTP协议，等等。</p>
+<h2 id="运输层"><a href="#运输层" class="headerlink" title="运输层"></a>运输层</h2><p>运输层的任务就是负责向两个主机进程之间的通信提供通用的数据传输服务。应用进程利用该服务传送应用层报文。</p>
 <ul>
 <li>所谓通用，是指并不针对某个特定网络应用，而是多种应用可以使用同一个运输层服务。由于一台主机可以同时运行多个进程，因此运输层有复用和分用的功能。</li>
 </ul>
@@ -434,7 +434,7 @@
 <p><img src="/images/2017/network-8.png" alt=""></p>
 <br> 
 
-<h3 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h3><p>网络层负责为分组交换网上的不同主机提供通信服务。在发送数据时，网络层把运输层产生的报文段或用户数据报封装成分组或包(packet)进行传送。</p>
+<h2 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h2><p>网络层负责为分组交换网上的不同主机提供通信服务。在发送数据时，网络层把运输层产生的报文段或用户数据报封装成分组或包(packet)进行传送。</p>
 <ul>
 <li><p>在TCP/IP体系中，由于网络层使用IP协议，因此分组也叫作IP数据报，简称数据报(datagram)。</p>
 </li>
@@ -450,7 +450,7 @@
 <p>1.地址解析协议 ARP (Address Resolution Protocol)<br>2.网际控制报文协议 ICMP (Internet Control Message Protocol)<br>3.网际组管理协议 IGMP (Internet Group Management Protocol)</p>
 <p><img src="/images/2017/network-9.png" alt=""></p>
 <br> 
-想要在全世界范围内把网络都互连起来，并且能够互相通信，会遇到许多问题需要解决。TCP/IP提示在网络互连上采用的做法是在网络层(即IP层)采用了标准化协议，但相互连接的网络则可以是异构的，计算机网络通过一些路由器进行互连，擦于互连的计算机网络都使用相同的网际协议IP(Internet Protocol)，因此可以把互连以后的计算机网络看成一个虚拟互连网络。
+想要在全世界范围内把网络都互连起来，并且能够互相通信，会遇到许多问题需要解决。TCP/IP提示在网络互连上采用的做法是在网络层(即IP层)采用了标准化协议，但相互连接的网络则可以是异构的，计算机网络通过一些路由器进行互连，参与互连的计算机网络都使用相同的网际协议IP(Internet Protocol)，因此可以把互连以后的计算机网络看成一个虚拟互连网络。
 - 虚拟互连网络也就是逻辑互连网络，它的意思就是互连起来的各种物理网络的异构性本来是客观存在的，但是我们利用 IP 协议就可以使这些性能各异的网络从用户看起来好像是一个统一的网络。使用 IP 协议的虚拟互连网络可简称为 IP 网。
 
 <ul>
@@ -461,7 +461,7 @@
 <li><p>IPv4是在20世纪70年代末期设计的，因特网经过几十年的飞速发展，到2011年 IPv4的地址已经耗尽。为解决IP地址耗尽就采用了更大地址空间的新版本的IP，即IPv6。IPv6把地址从IPv4的32位增大到128位。这样大的地址空间在可预见的将来是不会用完的。</p>
 </li>
 </ul>
-<h3 id="数据链路层"><a href="#数据链路层" class="headerlink" title="数据链路层"></a>数据链路层</h3><p>数据链路层常简称为链路层。两台主机间的数据传输，总是在一段段的链路上传送的，这就需要使用专门的链路层的协议。</p>
+<h2 id="数据链路层"><a href="#数据链路层" class="headerlink" title="数据链路层"></a>数据链路层</h2><p>数据链路层常简称为链路层。两台主机间的数据传输，总是在一段段的链路上传送的，这就需要使用专门的链路层的协议。</p>
 <ul>
 <li><p>在两个相邻结点之间传送数据时，数据链路层将网络层交下来的IP数据报组装成帧，在两个相邻结点之间的链路上传送帧。每一帧包括数据和必要的控制信息，如同步信息、地址信息、差错控制等。</p>
 </li>
@@ -470,7 +470,7 @@
 <li><p>控制信息还使解说段能够监测到所收到的帧中有无差错。如发现差错数据链路层就简单地丢弃这个出了差错的帧，以免继续在网络中传送下去白白浪费网络资源。如果需要改正数据在数据链路层传输时出现的差错，那么就要采用可靠传输协议来纠正出现的差错。</p>
 </li>
 </ul>
-<h3 id="物理层"><a href="#物理层" class="headerlink" title="物理层"></a>物理层</h3><p>在物理层上所传数据的单位是比特。因此物理层要考虑用多大的电压代表1或0，以及接收方如何识别出发送方所发送的比特。物理层还要确定连接电缆的插头应当有多少根引脚以及各条引脚应该如何连接。</p>
+<h2 id="物理层"><a href="#物理层" class="headerlink" title="物理层"></a>物理层</h2><p>在物理层上所传数据的单位是比特。因此物理层要考虑用多大的电压代表1或0，以及接收方如何识别出发送方所发送的比特。物理层还要确定连接电缆的插头应当有多少根引脚以及各条引脚应该如何连接。</p>
 <br> 
 
 <blockquote>
@@ -479,7 +479,7 @@
 <br> 
 
 <p><img src="/images/2017/network-91.png" alt=""></p>
-<p>图中的是应用进程的数据在各层之间的传递过程中所经历的变化。假定主机1的应用进程AP1向主机2的应用进程AP2传送数据。AP1先将其数据交给主机的应用层，应用层加上必要的控制信息H5就变成了下一层的数据单元。运输层收到这个数据单元后，加上本层的控制信息H4，再交给网络层，成为网络层的数据单元。以此类推，到数据链路层后控制信息被分为两部分，分别加到本层数据单元的首部H2和尾部T2，而第1层物理层由于是比特流的传送，所以不再加上控制信息。传送比特流时从搜捕开始传送。当这一串的比特流离开路由器到达目的站主机2时，就从主机2的第1层按照上面的方式，依次上升到第五层。最后把应用进程AP1发送的数据交给目的站的应用进程AP2。虽然要经过复杂过程才能送到终点的应用进程，但这些复杂的过程对用户来说，却都被屏蔽掉了，以至于应用进程AP1觉得好像是直接把数据交给了应用进程AP2.同理，任何两个同样的层次之间，也好像如同直接传递给对方一样。这就是所谓的“对等层”之间通信。</p>
+<p>图中的是应用进程的数据在各层之间的传递过程中所经历的变化。假定主机1的应用进程AP1向主机2的应用进程AP2传送数据。AP1先将其数据交给主机的应用层，应用层加上必要的控制信息H5就变成了下一层的数据单元。运输层收到这个数据单元后，加上本层的控制信息H4，再交给网络层，成为网络层的数据单元。以此类推，到数据链路层后控制信息被分为两部分，分别加到本层数据单元的首部H2和尾部T2，而第1层物理层由于是比特流的传送，所以不再加上控制信息。传送比特流时从首部开始传送。当这一串的比特流离开路由器到达目的站主机2时，就从主机2的第1层按照上面的方式，依次上升到第五层。最后把应用进程AP1发送的数据交给目的站的应用进程AP2。虽然要经过复杂过程才能送到终点的应用进程，但这些复杂的过程对用户来说，却都被屏蔽掉了，以至于应用进程AP1觉得好像是直接把数据交给了应用进程AP2.同理，任何两个同样的层次之间，也好像如同直接传递给对方一样。这就是所谓的“对等层”之间通信。</p>
 <br> 
 
 
@@ -517,6 +517,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag"> <i class="fa fa-tag"></i> 网络</a>
+          
+        </div>
       
 
       
@@ -620,7 +626,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-count">42</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -632,10 +638,10 @@
               
               
               <div class="site-state-item site-state-tags">
-                
-                  <span class="site-state-item-count">6</span>
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">标签</span>
-                
+                </a>
               </div>
             
 
@@ -688,7 +694,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">2.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#网络起源"><span class="nav-number">3.</span> <span class="nav-text">网络起源</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#因特网的标准化工作"><span class="nav-number">4.</span> <span class="nav-text">因特网的标准化工作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#因特网的组成"><span class="nav-number">5.</span> <span class="nav-text">因特网的组成</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-边缘部分"><span class="nav-number">5.0.0.1.</span> <span class="nav-text">1.边缘部分</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-核心部分"><span class="nav-number">5.0.0.2.</span> <span class="nav-text">2.核心部分</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#计算机网络的性能"><span class="nav-number">6.</span> <span class="nav-text">计算机网络的性能</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-速率"><span class="nav-number">6.0.0.1.</span> <span class="nav-text">1.速率</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-带宽"><span class="nav-number">6.0.0.2.</span> <span class="nav-text">2.带宽</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-吞吐量"><span class="nav-number">6.0.0.3.</span> <span class="nav-text">3.吞吐量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-传输时延"><span class="nav-number">6.0.0.4.</span> <span class="nav-text">4.传输时延</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-信道利用率"><span class="nav-number">6.0.0.5.</span> <span class="nav-text">5.信道利用率</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#计算机网络体系结构"><span class="nav-number">7.</span> <span class="nav-text">计算机网络体系结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#应用层"><span class="nav-number">7.0.1.</span> <span class="nav-text">应用层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运输层"><span class="nav-number">7.0.2.</span> <span class="nav-text">运输层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络层"><span class="nav-number">7.0.3.</span> <span class="nav-text">网络层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据链路层"><span class="nav-number">7.0.4.</span> <span class="nav-text">数据链路层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#物理层"><span class="nav-number">7.0.5.</span> <span class="nav-text">物理层</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">2.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#网络起源"><span class="nav-number">3.</span> <span class="nav-text">网络起源</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#因特网的标准化工作"><span class="nav-number">4.</span> <span class="nav-text">因特网的标准化工作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#因特网的组成"><span class="nav-number">5.</span> <span class="nav-text">因特网的组成</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-边缘部分"><span class="nav-number">5.1.</span> <span class="nav-text">1.边缘部分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-核心部分"><span class="nav-number">5.2.</span> <span class="nav-text">2.核心部分</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#计算机网络的性能"><span class="nav-number">6.</span> <span class="nav-text">计算机网络的性能</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-速率"><span class="nav-number">6.1.</span> <span class="nav-text">1.速率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-带宽"><span class="nav-number">6.2.</span> <span class="nav-text">2.带宽</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-吞吐量"><span class="nav-number">6.3.</span> <span class="nav-text">3.吞吐量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-传输时延"><span class="nav-number">6.4.</span> <span class="nav-text">4.传输时延</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-信道利用率"><span class="nav-number">6.5.</span> <span class="nav-text">5.信道利用率</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#计算机网络体系结构"><span class="nav-number">7.</span> <span class="nav-text">计算机网络体系结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#应用层"><span class="nav-number">7.1.</span> <span class="nav-text">应用层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运输层"><span class="nav-number">7.2.</span> <span class="nav-text">运输层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络层"><span class="nav-number">7.3.</span> <span class="nav-text">网络层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据链路层"><span class="nav-number">7.4.</span> <span class="nav-text">数据链路层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#物理层"><span class="nav-number">7.5.</span> <span class="nav-text">物理层</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
